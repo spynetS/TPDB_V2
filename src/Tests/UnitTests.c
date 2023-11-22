@@ -87,7 +87,7 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 
 	if(NewRow != NULL)
 	{
-		DestroyTPTable(NewRow);
+		DestroyTPTableRow(NewRow);
 		DestroyTPTable(NewTable);
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_SUCCESS);
@@ -96,7 +96,7 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 	}
 	else
 	{
-		DestroyTPTable(NewRow);
+		DestroyTPTableRow(NewRow);
 		DestroyTPTable(NewTable);
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_FAIL);

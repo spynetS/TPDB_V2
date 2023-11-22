@@ -26,8 +26,7 @@ void DestroyTPTableRow(TPTable_Row *_self)
 			}
 			free(_self->Values);
 		}
-
-		_self->ValCount = -1;
+		
 		free(_self);
 	}
 }
