@@ -1,6 +1,9 @@
 #ifndef I_ERRORS_H
 #define I_ERRORS_H
 
+#define ERROR_ASCII_SUCCESS "✅"
+#define ERROR_ASCII_FAIL "❌"
+
 enum TP_ERROR_TYPES
 {
 	TP_SUCCESS = 0,
