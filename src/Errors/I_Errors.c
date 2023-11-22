@@ -10,6 +10,6 @@ void TP_CheckError(enum TP_ERROR_TYPES err)
 	char *ErrorDocLink = (char*)malloc(sizeof(char) * ErrorDocLinkSize);
 	sprintf(ErrorDocLink, "firefox ./docs/Errors/TPErrors.html?%d", err);
 
-	system(firefox);
+	system(ErrorDocLink);
 	free(ErrorDocLink);
 }
