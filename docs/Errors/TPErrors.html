@@ -17,19 +17,33 @@
 		</div>
 
 		<div class="w-full flex flex-col px-[20%] py-4">
-			
 			<div class="flex flex-row w-full flex flex-col">
-				<h3 id="100" class="text-2xl mb-4">I_Database</h3>
-				<div class="pl-4">
+				<h3 id="100" class="text-2xl mb-4">#100 I_Database</h3>
+				<div class="pl-8 mb-12">
 					<p id="101" class="text-lg font-bold">#101 TP_FAILED_CREATETPDATABASE</p>
 					<p class="text-lg ml-10">
 						Standard initiation function for "TP_Database" has failed.<br/>
-						Issues:<br/>
-						<span style="margin-left: 30px;"></span>- Make sure you are passing a constant string. ex: "hello".<br/>
-						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
+						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
+						There are no known reasons or bugs within this function, if it fails, report to the git repository.
 					</p>
 				</div>
+			</div>
 
+			<div class="flex flex-row w-full flex flex-col">
+				<h3 id="100" class="text-2xl mb-4">#200 I_Table</h3>
+				<div class="pl-8 mb-12">
+					<p id="201" class="text-lg font-bold">#201 TP_FAILED_CREATETPTABLE</p>
+					<p class="text-lg ml-10">
+						Standard initiation function for "TP_Table" has failed.<br/>
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
+						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> There can be an issue with TP_StrnCat, make sure you have assigned a proper path to your database, no '/' in the end<br/><br/>
+						There are no known reasons or bugs within this function, if it fails, report to the git repository.
+					</p>
+				</div>
 			</div>
 
 		</div>

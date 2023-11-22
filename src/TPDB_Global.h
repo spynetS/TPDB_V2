@@ -10,6 +10,8 @@ enum TPTable_Column_Types
 	TP_FKEY
 };
 
+typedef struct TPDatabase TPDatabase;
+
 typedef struct
 {
 	int _ID;
@@ -19,6 +21,7 @@ typedef struct
 
 typedef struct
 {
+	TPDatabase *ParentDatabase;
 	int _ID;
 	char *Name;
 	char *Path;
@@ -30,12 +33,12 @@ typedef struct
 	TPTable_Row **Rows;
 } TPTable;
 
-typedef struct
+struct TPDatabase
 {
 	int _ID;
 	char *Name;
 	char *Path;
 	TPTable *Tables;
-} TPDatabase;
+};
 
 #endif
