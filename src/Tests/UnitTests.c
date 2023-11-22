@@ -6,6 +6,7 @@
 #include "../Utils/StringTools.h"
 #include "../Interface/I_Database.h"
 #include "../Interface/I_Table.h"
+#include "../Interface/I_Row.h"
 
 enum TP_ERROR_TYPES TP_TEST_STRNCAT()
 {
@@ -76,6 +77,34 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTable()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
+{
+	printf("--|TP_TEST_CreateTPTableRow|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+	TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase);
+	NewTable->ColCount = 2;
+	TPTable_Row *NewRow = CreateTPTableRow(0, NewTable);
+
+	if(NewRow != NULL)
+	{
+		DestroyTPTable(NewRow);
+		DestroyTPTable(NewTable);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPTable(NewRow);
+		DestroyTPTable(NewTable);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_CREATETPTABLEROW;
+	}
+}
+
 int main()
 {
 	puts("--|UnitTest|--");
@@ -83,5 +112,6 @@ int main()
 
 	TP_CheckError(TP_TEST_CreateTPDatabase());
 	TP_CheckError(TP_TEST_CreateTPTable());
+	TP_CheckError(TP_TEST_CreateTPTableRow());
 	exit(0);
 }

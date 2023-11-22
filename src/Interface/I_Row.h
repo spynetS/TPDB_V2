@@ -3,7 +3,7 @@
 
 #include "../TPDB_Global.h"
 
-TPTable_Row *CreateTPTableRow(int __ID, int _ValCount);
+TPTable_Row *CreateTPTableRow(int __ID, TPTable *_Table);
 void DestroyTPTableRow(TPTable_Row *_self);
 
 #endif

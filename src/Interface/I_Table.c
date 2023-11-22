@@ -22,15 +22,18 @@ TPTable *CreateTPTable(char *_Name, TPDatabase *_Database)
 
 void DestroyTPTable(TPTable *_self)
 {
-	if(_self->Name != NULL)
+	if(_self != NULL)
 	{
-		free(_self->Name);
-		_self->Name = NULL;
+		if(_self->Name != NULL)
+		{
+			free(_self->Name);
+			_self->Name = NULL;
+		}
+		if(_self->Path != NULL)
+		{
+			free(_self->Path);
+			_self->Path = NULL;
+		}
+		free(_self);
 	}
-	if(_self->Path != NULL)
-	{
-		free(_self->Path);
-		_self->Path = NULL;
-	}
-	free(_self);
 }
