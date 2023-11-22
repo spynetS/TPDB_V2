@@ -58,6 +58,24 @@
 			</div>
 
 			<div class="flex flex-row w-full flex flex-col">
+				<h3 id="300" class="text-2xl mb-4">#300 I_Table</h3>
+				<div class="pl-8 mb-12">
+					<p id="301" class="text-lg font-bold">#301 TP_FAILED_CREATETPTABLEROW(Int, TPTable *)</p>
+					<p class="text-lg ml-10">
+						Function to allocate a new table row within target table.<br/>
+						Standard initiation function for "TPTable_Row" has failed.<br/>
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Int) The ID/index of the row within the table. If new, table->RowCount.<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (TPTable*) Target Table to hold the rows of data.<br/><br/>
+
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure to allocate the TPDatabase and TPTable beforehand properly.<br/><br/>
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
+					</p>
+				</div>
+			</div>
+
+			<div class="flex flex-row w-full flex flex-col">
 				<h3 id="500" class="text-2xl mb-4">#500 StringTools</h3>
 				<div class="pl-8 mb-12">
 					<p id="501" class="text-lg font-bold">#501 TP_FAILED_STRNCAT(Char *, Int, ...)</p>
@@ -92,7 +110,7 @@
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
 						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure that the first argument (Char* _path) is not NULL or empty.<br/><br/>
-						<span style="margin-left: 30px;"></span><b>-</b> If you recieve a warning (❓), keep in mind that mkdir will return an error if folder already exists. Ignore this error in that case.<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> If you recieve a warning (❓), keep in mind that mkdir will return an error if folder already exists. Ignore this error in that case.<br/><br/>
 						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
 					</p>
 				</div>
