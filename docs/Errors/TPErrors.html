@@ -17,31 +17,64 @@
 		</div>
 
 		<div class="w-full flex flex-col px-[20%] py-4">
+
 			<div class="flex flex-row w-full flex flex-col">
 				<h3 id="100" class="text-2xl mb-4">#100 I_Database</h3>
 				<div class="pl-8 mb-12">
-					<p id="101" class="text-lg font-bold">#101 TP_FAILED_CREATETPDATABASE</p>
+					<p id="101" class="text-lg font-bold">#101 TP_FAILED_CREATETPDATABASE(Char *, Char *)</p>
 					<p class="text-lg ml-10">
+						Function to allocate a new Database.<br/>
 						Standard initiation function for "TP_Database" has failed.<br/>
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) This acts as a enforced obsolete value. It is in place to allow for future updates or plugins where one can <br/>
+						<span style="margin-left: 42px;"></span>hold multiple databases. Preferable to provide a proper name.<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The path/name to be provided to the database which will also be the name of the folder acting as root for the database.<br/><br/>
+
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
 						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
-						There are no known reasons or bugs within this function, if it fails, report to the git repository.
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
 					</p>
 				</div>
 			</div>
 
 			<div class="flex flex-row w-full flex flex-col">
-				<h3 id="100" class="text-2xl mb-4">#200 I_Table</h3>
+				<h3 id="200" class="text-2xl mb-4">#200 I_Table</h3>
 				<div class="pl-8 mb-12">
-					<p id="201" class="text-lg font-bold">#201 TP_FAILED_CREATETPTABLE</p>
+					<p id="201" class="text-lg font-bold">#201 TP_FAILED_CREATETPTABLE(Char *, TPDatabase *)</p>
 					<p class="text-lg ml-10">
+						Function to allocate a new table within target Database.<br/>
 						Standard initiation function for "TP_Table" has failed.<br/>
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The name to be provided to the table which will also be the name of the folder holding the tables rows<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (TPDatabase*) Target Database to hold tables and so on. Make sure to allocate the TPDatabase beforehand properly.<br/><br/>
+
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
 						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> There can be an issue with TP_StrnCat, make sure you have assigned a proper path to your database, no '/' in the end<br/><br/>
-						There are no known reasons or bugs within this function, if it fails, report to the git repository.
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
+					</p>
+				</div>
+			</div>
+
+			<div class="flex flex-row w-full flex flex-col">
+				<h3 id="500" class="text-2xl mb-4">#500 StringTools</h3>
+				<div class="pl-8 mb-12">
+					<p id="501" class="text-lg font-bold">#501 TP_FAILED_STRNCAT(Char *, Int, ...)</p>
+					<p class="text-lg ml-10">
+						Function to dynamically concatonate multiple strings together.<br/>
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The string which you want to be in the begining of the resulting string.<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Int) How many strings will you be providing to concatonate to base string.<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) {n} Strings to concatonate.<br/><br/>
+
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
+						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure that the first argument (Char* _baseString) is not NULL.<br/>
+						<span style="margin-left: 42px;"></span>If you want to replicate passing NULL, then use an empty string ("").<br/><br/>
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
 					</p>
 				</div>
 			</div>

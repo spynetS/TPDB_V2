@@ -83,6 +83,5 @@ int main()
 
 	TP_CheckError(TP_TEST_CreateTPDatabase());
 	TP_CheckError(TP_TEST_CreateTPTable());
-	
 	exit(0);
 }
