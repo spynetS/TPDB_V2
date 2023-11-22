@@ -1,6 +1,12 @@
 #ifndef TPDB_GLOBAL_H
 #define TPDB_GLOBAL_H
 
+#define TP_TRUE 1
+#define TP_FALSE 0
+
+#define TP_EXIT 1
+#define TP_IGNORE 0
+
 enum TPTable_Column_Types
 {
 	TP_INT,

@@ -23,10 +23,6 @@ appendPrefix() {
 	echo "${new_array[@]}"
 }
 
-#tpdbPath="./external/tpdb/"
-#tpdbC=("utils.c" "log.c" "storage.c" "tableData.c" "table.c")
-#tpdbRelative=$(appendPrefix "tpdbC" "${tpdbPath}")
-
 UtilsPath="./src/Utils/"
 UtilsC=("StringTools.c")
 UtilsRelative=$(appendPrefix "UtilsC" "${UtilsPath}")
@@ -35,11 +31,15 @@ ErrorsPath="./src/Errors/"
 ErrorsC=("I_Errors.c")
 ErrorsRelative=$(appendPrefix "ErrorsC" "${ErrorsPath}")
 
+StoragePath="./src/Storage/"
+StorageC=("Storage.c")
+StorageRelative=$(appendPrefix "StorageC" "${StoragePath}")
+
 InterfacePath="./src/Interface/"
 InterfaceC=("I_Database.c" "I_Row.c" "I_Table.c")
 InterfaceRelative=$(appendPrefix "InterfaceC" "${InterfacePath}")
 
-completeCPaths=($UtilsRelative $ErrorsRelative $InterfaceRelative)
+completeCPaths=($UtilsRelative $ErrorsRelative $StorageRelative $InterfaceRelative)
 
 projectRunC="./src/"
 runPath="./build/"

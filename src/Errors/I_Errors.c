@@ -4,7 +4,7 @@
 
 #include "I_Errors.h"
 
-void TP_CheckError(enum TP_ERROR_TYPES err)
+void TP_CheckError(enum TP_ERROR_TYPES err, int _exitOnError)
 {
 	if(err != TP_SUCCESS)
 	{
@@ -12,10 +12,11 @@ void TP_CheckError(enum TP_ERROR_TYPES err)
 		char *ErrorDocLink = (char*)malloc(sizeof(char) * ErrorDocLinkSize);
 		sprintf(ErrorDocLink, "firefox https://techpology.github.io/TPDB_V2/Errors/TPErrors.html?%d", err);
 
-		puts("You can enable auto redirect within the source code in:\n{/src/Errors/I_Errors.c : (TP_CheckError())}, uncomment system(...)");
+		puts("You can enable auto redirect within the source code in:\n{/src/Errors/I_Errors.c : (TP_CheckError())}, uncomment system(...)\n");
 		puts(ErrorDocLink);
+		puts("");
 		//system(ErrorDocLink);
 		free(ErrorDocLink);
-		exit(err);
+		if(_exitOnError == TP_EXIT){ exit(err); }
 	}
 }

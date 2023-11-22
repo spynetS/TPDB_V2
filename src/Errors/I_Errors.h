@@ -2,7 +2,11 @@
 #define I_ERRORS_H
 
 #define ERROR_ASCII_SUCCESS "✅"
+#define ERROR_ASCII_WARNING "❓"
 #define ERROR_ASCII_FAIL "❌"
+
+#include "../TPDB_Global.h"
+#define ENABLE_ERROR_LOG TP_TRUE
 
 enum TP_ERROR_TYPES
 {
@@ -10,9 +14,10 @@ enum TP_ERROR_TYPES
 	TP_FAILED_CREATETPDATABASE = 101,
 	TP_FAILED_CREATETPTABLE = 201,
 	TP_FAILED_CREATETPTABLEROW = 301,
-	TP_FAILED_STRNCAT = 501
+	TP_FAILED_STRNCAT = 501,
+	TP_FAILED_MKDIR = 601
 };
 
-void TP_CheckError(enum TP_ERROR_TYPES err);
+void TP_CheckError(enum TP_ERROR_TYPES err, int _exitOnError);
 
 #endif

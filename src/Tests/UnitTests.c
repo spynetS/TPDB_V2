@@ -4,6 +4,9 @@
 
 #include "../Errors/I_Errors.h"
 #include "../Utils/StringTools.h"
+
+#include "../Storage/Storage.h"
+
 #include "../Interface/I_Database.h"
 #include "../Interface/I_Table.h"
 #include "../Interface/I_Row.h"
@@ -108,10 +111,12 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 int main()
 {
 	puts("--|UnitTest|--");
-	TP_CheckError(TP_TEST_STRNCAT());
+	TP_CheckError(TP_TEST_STRNCAT(), TP_EXIT);
 
-	TP_CheckError(TP_TEST_CreateTPDatabase());
-	TP_CheckError(TP_TEST_CreateTPTable());
-	TP_CheckError(TP_TEST_CreateTPTableRow());
+	TP_CheckError(TP_Mkdir("./db"), TP_IGNORE);
+
+	TP_CheckError(TP_TEST_CreateTPDatabase(), TP_EXIT);
+	TP_CheckError(TP_TEST_CreateTPTable(), TP_EXIT);
+	TP_CheckError(TP_TEST_CreateTPTableRow(), TP_EXIT);
 	exit(0);
 }

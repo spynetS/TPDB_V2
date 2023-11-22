@@ -78,6 +78,26 @@
 				</div>
 			</div>
 
+			<div class="flex flex-row w-full flex flex-col">
+				<h3 id="600" class="text-2xl mb-4">#600 Storage</h3>
+				<div class="pl-8 mb-12">
+					<p id="601" class="text-lg font-bold">#601 TP_FAILED_MKDIR(Char *)</p>
+					<p class="text-lg ml-10">
+						An interface layer ontop of unistd mkdir (Create folder/directory).<br/>
+						The interface is required to allow for TPDB error handling.
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The full path including the name of the folder you'd like to create.<br/><br/>
+
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
+						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure that the first argument (Char* _path) is not NULL or empty.<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> If you recieve a warning (❓), keep in mind that mkdir will return an error if folder already exists. Ignore this error in that case.<br/>
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
+					</p>
+				</div>
+			</div>
+
 		</div>
 
 		<script>
