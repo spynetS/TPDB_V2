@@ -70,6 +70,33 @@ enum TP_ERROR_TYPES TP_TEST_AppendToArrayOfPointers()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_FreeArrayOfPointers()
+{
+	printf("--|TP_TEST_FreeArrayOfPointers|--: ...");
+	char **TestStrArray = NULL;
+	size_t TestStrArrayLen = 0;
+
+	char *str1 = "Hello";
+	char *str2 = "World";
+	TP_CheckError(AppendToArrayOfPointers((void***)&TestStrArray, &TestStrArrayLen, str1, sizeof(char*)), TP_EXIT);
+	TP_CheckError(AppendToArrayOfPointers((void***)&TestStrArray, &TestStrArrayLen, str2, sizeof(char*)), TP_EXIT);
+
+	TP_CheckError(FreeArrayOfPointers((void***)&TestStrArray, TestStrArrayLen), TP_EXIT);
+
+	if(TestStrArray == NULL)
+	{
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_FreeArrayOfPointers;
+	}
+}
+
 enum TP_ERROR_TYPES TP_TEST_CreateTPDatabase()
 {
 	printf("--|TP_TEST_CreateTPDatabase|--: ...");
@@ -147,7 +174,9 @@ int main()
 {
 	puts("--|UnitTest|--");
 	TP_CheckError(TP_TEST_STRNCAT(), TP_EXIT);
+
 	TP_CheckError(TP_TEST_AppendToArrayOfPointers(), TP_EXIT);
+	TP_CheckError(TP_TEST_FreeArrayOfPointers(), TP_EXIT);
 
 	TP_CheckError(TP_Mkdir("./db"), TP_IGNORE);
 

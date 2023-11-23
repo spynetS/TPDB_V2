@@ -23,6 +23,7 @@ enum TP_ERROR_TYPES
 	TP_FAILED_MKDIR = 601,
 	
 	TP_FAILED_AppendToArrayOfPointers = 701,
+	TP_FAILED_FreeArrayOfPointers = 702,
 };
 
 void TP_CheckError(enum TP_ERROR_TYPES err, int _exitOnError);

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "../Storage/Storage.h"
 #include "I_Database.h"
 
 TPDatabase *CreateTPDatabase(char *_Name, char *_Path)

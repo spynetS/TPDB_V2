@@ -34,3 +34,29 @@ enum TP_ERROR_TYPES AppendToArrayOfPointers(void ***targetArray, size_t *targetA
 	}
 	return TP_SUCCESS;
 }
+
+enum TP_ERROR_TYPES FreeArrayOfPointers(void ***targetArray, size_t targetArrayLength)
+{
+	if((*targetArray) != NULL)
+	{
+		for (size_t i = 0; i < targetArrayLength; i++)
+		{
+			if((*targetArray)[i] != NULL)
+			{
+				free((*targetArray)[i]);
+				(*targetArray)[i] = NULL;
+			}
+			else
+			{
+				return TP_FAILED_FreeArrayOfPointers;
+			}
+		}
+		free((*targetArray));
+		(*targetArray) = NULL;
+		return TP_SUCCESS;
+	}
+	else
+	{
+		return TP_FAILED_FreeArrayOfPointers;
+	}
+}
