@@ -44,7 +44,7 @@ struct TPDatabase
 	int _ID;
 	char *Name;
 	char *Path;
-	TPTable *Tables;
+	TPTable **Tables;
 };
 
 #endif

@@ -24,7 +24,7 @@ appendPrefix() {
 }
 
 UtilsPath="./src/Utils/"
-UtilsC=("StringTools.c")
+UtilsC=("StringTools.c" "MiscTools.c")
 UtilsRelative=$(appendPrefix "UtilsC" "${UtilsPath}")
 
 ErrorsPath="./src/Errors/"

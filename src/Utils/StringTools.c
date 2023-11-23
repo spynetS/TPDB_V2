@@ -16,7 +16,8 @@ char *TP_StrnCat(char *_baseString, int _count, ...) {
 		char *_str = (char *)malloc(sizeof(char) * _strSize);
 		sprintf(_str, "%s%s", retStr, tempStr);
 
-		if (retStr != _baseString && retStr != NULL) {
+		if (retStr != _baseString && retStr != NULL)
+		{
 			free(retStr);
 		}
 
