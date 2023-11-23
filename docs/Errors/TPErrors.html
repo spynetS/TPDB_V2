@@ -4,6 +4,8 @@
 <html>
 	<head>
 		<title>TPDB Error docs</title>
+		<link href="prism.css" type="text/css" rel="stylesheet"/>
+		<script src="prism.js"></script>
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	<body class="bg-slate-50">
@@ -29,6 +31,12 @@
 						<span style="margin-left: 42px;"></span>hold multiple databases. Preferable to provide a proper name.<br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The path/name to be provided to the database which will also be the name of the folder acting as root for the database.<br/><br/>
 
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+							</code>
+						</pre>
+
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
 						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
@@ -47,6 +55,13 @@
 						<b>Args:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The name to be provided to the table which will also be the name of the folder holding the tables rows<br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (TPDatabase*) Target Database to hold tables and so on. Make sure to allocate the TPDatabase beforehand properly.<br/><br/>
+
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+								TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase);
+							</code>
+						</pre>
 
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
@@ -68,6 +83,15 @@
 						<span style="margin-left: 30px;"></span><b>-</b> (Int) The ID/index of the row within the table. If new, table->RowCount.<br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (TPTable*) Target Table to hold the rows of data.<br/><br/>
 
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+								TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase);
+								NewTable->ColCount = 2;
+								TPTable_Row *NewRow = CreateTPTableRow(0, NewTable);
+							</code>
+						</pre>
+
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure to allocate the TPDatabase and TPTable beforehand properly.<br/><br/>
 						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
@@ -85,6 +109,18 @@
 						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The string which you want to be in the begining of the resulting string.<br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (Int) How many strings will you be providing to concatonate to base string.<br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (Char*) {n} Strings to concatonate.<br/><br/>
+
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								// Concat from an empty string
+								char *test_1 = TP_StrnCat("", 2, "hello ", "world!");
+								// Concat from a string
+								char *test_2 = TP_StrnCat("How ", 3, "are ", "you", "?");
+
+								free(test_1);
+								free(test_2);
+							</code>
+						</pre>
 
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
@@ -106,11 +142,48 @@
 						<b>Args:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> (Char*) The full path including the name of the folder you'd like to create.<br/><br/>
 
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								TP_Mkdir("./db");
+							</code>
+						</pre>
+
 						<b>Notes:</b><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
 						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> Make sure that the first argument (Char* _path) is not NULL or empty.<br/><br/>
 						<span style="margin-left: 30px;"></span><b>-</b> If you recieve a warning (❓), keep in mind that mkdir will return an error if folder already exists. Ignore this error in that case.<br/><br/>
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
+					</p>
+				</div>
+			</div>
+
+			<div class="flex flex-row w-full flex flex-col">
+				<h3 id="700" class="text-2xl mb-4">#700 Storage</h3>
+				<div class="pl-8 mb-12">
+					<p id="701" class="text-lg font-bold">#701 TP_FAILED_AppendToArrayOfPointers(void***, size_t*, void*, size_t)</p>
+					<p class="text-lg ml-10">
+						A generic function to allow for dynamic allocation of pointer arrays.<br/>
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (void***) A pointer to an array of pointers.<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (size_t*) A pointer to the element count of the array of pointers<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (void*) The pointer intended to be stored in the array of pointers<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (size_t) The sizeof the pointer type. For example: sizeof(int*), sizeof(char*), ...<br/><br/>
+
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								char **ArrayOfPointers = NULL;
+								size_t ArrayOfPointersLen = 0;
+								char *_str = "Hello";
+
+								AppendToArrayOfPointers((void***)&ArrayOfPointers, &ArrayOfPointersLen, _str, sizeof(char*));
+							</code>
+						</pre>
+
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello" for the void*.<br/>
+						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure that the first argument (void***) which would be (&void**) is set to NULL if empty.<br/><br/>
 						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
 					</p>
 				</div>

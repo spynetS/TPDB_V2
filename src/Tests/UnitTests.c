@@ -42,8 +42,8 @@ enum TP_ERROR_TYPES TP_TEST_AppendToArrayOfPointers()
 	char **TestStrArray = NULL;
 	size_t TestStrArrayLen = 0;
 
-	char * str1 = "Hello";
-	char * str2 = "World";
+	char *str1 = "Hello";
+	char *str2 = "World";
 	TP_CheckError(AppendToArrayOfPointers((void***)&TestStrArray, &TestStrArrayLen, str1, sizeof(char*)), TP_EXIT);
 	TP_CheckError(AppendToArrayOfPointers((void***)&TestStrArray, &TestStrArrayLen, str2, sizeof(char*)), TP_EXIT);
 
