@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"tpdb_global.h": "c"
+		"tpdb_global.h": "c",
+		"i_errors.h": "c"
 	}
 }
