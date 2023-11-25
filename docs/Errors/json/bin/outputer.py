@@ -65,17 +65,18 @@ def getMainComp(main):
 
     return comp
 
-path = "./json.json"
-with open(path,"r") as f:
-    data = json.loads(f.read())
+def output(args):
+    path = "./json.json"
+    with open(path,"r") as f:
+        data = json.loads(f.read())
 
-mains = ""
-for main in data["errors"]:
-    mains+=(getMainComp(main))
+    mains = ""
+    for main in data["errors"]:
+        mains+=(getMainComp(main))
 
-text = ""
-with open("template.html","r") as f:
-    text = f.read()
-    text = text.replace("__ERRORS__",mains)
-with open("index.html","w") as f:
-    f.write(text)
+    text = ""
+    with open("template.html","r") as f:
+        text = f.read()
+        text = text.replace("__ERRORS__",mains)
+    with open("index.html","w") as f:
+        f.write(text)

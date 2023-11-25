@@ -1,13 +1,20 @@
 # How to generate doc with json
 
-## Generate json file
-There is a script named create.py that will create the json objects needed
-after awnsering some prompts.
+> program errorMaker
 
-## Generate html site
-There is a script named main.py that when run will create the components needed
-and lay them insde the template.html file as a new (index.html) file
+## Generate error to json
+run
+`./errorMaker create`
+then fill in all prompts
 
+## Output to index.html
+run
+`./errorMaker output`
+
+## Both
+run
+`./errorMaker create output`
+this will run the commands above at after one another
 
 ## TODO
 - [ ] Add codeblocks
