@@ -45,6 +45,7 @@ struct TPDatabase
 	char *Name;
 	char *Path;
 	char *ConfigPath;
+	size_t TablesCount;
 	TPTable **Tables;
 };
 

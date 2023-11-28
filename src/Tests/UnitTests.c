@@ -49,10 +49,9 @@ enum TP_ERROR_TYPES TP_TEST_AppendToArrayOfPointers()
 
 	if(strcmp(TestStrArray[0], "Hello") == 0 && strcmp(TestStrArray[1], "World") == 0 && TestStrArrayLen == 2)
 	{
-		free(TestStrArray[0]);
-		free(TestStrArray[1]);
-		free(TestStrArray);
-		TestStrArray = NULL;
+		if(TestStrArray[0] != NULL){ free(TestStrArray[0]); }
+		if(TestStrArray[1] != NULL){ free(TestStrArray[1]); }
+		if(TestStrArray != NULL){ free(TestStrArray); TestStrArray = NULL; }
 
 		printf(ERROR_ASCII_SUCCESS);
 		printf("\n");
@@ -170,6 +169,28 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_AddTable()
+{
+	printf("--|TP_TEST_CreateTPDatabase|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+	AddTable(MainDatabase, "Users");
+
+	if(MainDatabase != NULL)
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_AddTable;
+	}
+}
+
 int main()
 {
 	puts("--|UnitTest|--");
@@ -183,5 +204,7 @@ int main()
 	TP_CheckError(TP_TEST_CreateTPDatabase(), TP_EXIT);
 	TP_CheckError(TP_TEST_CreateTPTable(), TP_EXIT);
 	TP_CheckError(TP_TEST_CreateTPTableRow(), TP_EXIT);
+
+	TP_CheckError(TP_TEST_AddTable(), TP_EXIT);
 	exit(0);
 }

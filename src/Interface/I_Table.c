@@ -34,6 +34,7 @@ void DestroyTPTable(TPTable *_self)
 			free(_self->Path);
 			_self->Path = NULL;
 		}
+		_self->ParentDatabase = NULL;
 		free(_self);
 	}
 }

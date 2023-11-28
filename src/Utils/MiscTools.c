@@ -60,3 +60,32 @@ enum TP_ERROR_TYPES FreeArrayOfPointers(void ***targetArray, size_t targetArrayL
 		return TP_FAILED_FreeArrayOfPointers;
 	}
 }
+
+/* enum TP_ERROR_TYPES AppendToArrayOfPointers(void ***targetArray, size_t *targetArrayLength, void *ToAppend, size_t elementSize)
+{
+    void **newArray = NULL;
+
+    if ((*targetArray) == NULL)
+    {
+        newArray = malloc(elementSize);
+    }
+    else
+    {
+        newArray = realloc((*targetArray), elementSize * ((*targetArrayLength) + 1));
+    }
+
+    if (newArray == NULL)
+    {
+        return TP_FAILED_AppendToArrayOfPointers; // Allocation failure
+    }
+
+    // Copy the new element
+    memcpy(newArray[*targetArrayLength], ToAppend, elementSize);
+
+    // Update the array and length
+    *targetArray = newArray;
+    (*targetArrayLength)++;
+
+    return TP_SUCCESS;
+}
+ */
