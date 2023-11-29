@@ -78,7 +78,6 @@ def output(args):
     with open("./bin/template.html","r") as f:
         text = f.read()
         text = text.replace("__ERRORS__",mains)
-        print(text)
 
     with open("index.html","w") as f:
         f.write(text)
