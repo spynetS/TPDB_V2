@@ -66,12 +66,10 @@ def getMainComp(main):
     return comp
 
 def output(args):
-    print("1")
     path = "./json.json"
     with open(path,"r") as f:
         data = json.loads(f.read())
 
-    print("2")
     mains = ""
     for main in data["errors"]:
         mains+=(getMainComp(main))
@@ -82,9 +80,6 @@ def output(args):
         text = text.replace("__ERRORS__",mains)
         print(text)
 
-    print("4")
-
     with open("index.html","w") as f:
         f.write(text)
 
-    print("5")
