@@ -16,6 +16,12 @@ enum TPTable_Column_Types
 	TP_FKEY
 };
 
+typedef struct
+{
+	char *TableName;
+	int _ID;
+} TPForeignKey;
+
 typedef struct TPDatabase TPDatabase;
 
 typedef struct

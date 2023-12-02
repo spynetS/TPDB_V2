@@ -22,3 +22,10 @@ enum TP_ERROR_TYPES TP_Mkdir(char *_path)
 	if(ENABLE_ERROR_LOG){ printf("%s\n", ERROR_ASCII_SUCCESS); }
 	return TP_SUCCESS;
 }
+
+enum TP_ERROR_TYPES TP_StoreFile(char *_path, char *_val)
+{
+	FILE *f = fopen(_path, "w");
+	fputs(_val, f);
+	fclose(f);
+}

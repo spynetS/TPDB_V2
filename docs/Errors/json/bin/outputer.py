@@ -75,7 +75,7 @@ def output(args):
         mains+=(getMainComp(main))
 
     text = ""
-    with open("template.html","r") as f:
+    with open("./bin/template.html","r") as f:
         text = f.read()
         text = text.replace("__ERRORS__",mains)
     with open("index.html","w") as f:

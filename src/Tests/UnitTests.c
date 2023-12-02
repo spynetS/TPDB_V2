@@ -36,6 +36,33 @@ enum TP_ERROR_TYPES TP_TEST_STRNCAT()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_STRNCATARRAY()
+{
+	char **tempArray = (char**)malloc(sizeof(char*) * 2);
+	tempArray[0] = strdup("hello");
+	tempArray[1] = strdup("world!");
+
+	char *res = TP_StrnCatArray(tempArray, 2, " ");
+	puts(res);
+
+	if(res != NULL && strcmp(res, "hello world!") == 0)
+	{
+		free(tempArray[1]);
+		free(tempArray[0]);
+		free(tempArray);
+		free(res);
+		return TP_SUCCESS;
+	}
+	else
+	{
+		free(tempArray[1]);
+		free(tempArray[0]);
+		free(tempArray);
+		free(res);
+		return TP_FAILED_STRNCATARRAY;
+	}
+}
+
 enum TP_ERROR_TYPES TP_TEST_AppendToArrayOfPointers()
 {
 	printf("--|TP_TEST_AppendToArrayOfPointers|--: ...");
@@ -147,6 +174,7 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 	TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase);
 	NewTable->ColCount = 2;
+	SetColumnTypes(NewTable, 2, TP_STRING, TP_STRING);
 	TPTable_Row *NewRow = CreateTPTableRow(0, NewTable);
 
 	if(NewRow != NULL)
@@ -171,9 +199,34 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 
 enum TP_ERROR_TYPES TP_TEST_AddTable()
 {
-	printf("--|TP_TEST_CreateTPDatabase|--: ...");
+	printf("--|TP_TEST_AddTable|--: ...");
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 	AddTable(MainDatabase, "Users");
+
+	if(MainDatabase != NULL)
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_AddTable;
+	}
+}
+
+enum TP_ERROR_TYPES TP_TEST_AddRow()
+{
+	printf("--|TP_TEST_AddRow|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+	
+	AddTable(MainDatabase, "Users");
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
 
 	if(MainDatabase != NULL)
 	{
@@ -195,6 +248,7 @@ int main()
 {
 	puts("--|UnitTest|--");
 	TP_CheckError(TP_TEST_STRNCAT(), TP_EXIT);
+	TP_CheckError(TP_TEST_STRNCATARRAY(), TP_EXIT);
 
 	TP_CheckError(TP_TEST_AppendToArrayOfPointers(), TP_EXIT);
 	TP_CheckError(TP_TEST_FreeArrayOfPointers(), TP_EXIT);
