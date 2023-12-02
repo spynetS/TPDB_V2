@@ -45,6 +45,8 @@ typedef struct
 
 	enum TPTable_Column_Types *ColumnTypes;
 	TPTable_Row **Rows;
+
+	int RowsOnDemand;
 } TPTable;
 
 struct TPDatabase

@@ -9,7 +9,7 @@
 #include "I_Table.h"
 #include "I_Row.h"
 
-TPTable *CreateTPTable(char *_Name, TPDatabase *_Database)
+TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows)
 {
 	TPTable *newTPT = (TPTable*)malloc(sizeof(TPTable));
 	newTPT->ParentDatabase = _Database;
@@ -24,6 +24,7 @@ TPTable *CreateTPTable(char *_Name, TPDatabase *_Database)
 	newTPT->RowCount = 0;
 
 	newTPT->Rows = NULL;
+	newTPT->RowsOnDemand = _lazyLoadRows;
 
 	return newTPT;
 }
