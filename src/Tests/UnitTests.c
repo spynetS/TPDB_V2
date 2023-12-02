@@ -148,7 +148,7 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTable()
 {
 	printf("--|TP_TEST_CreateTPTable|--: ...");
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
-	TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase);
+	TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase, TP_FALSE);
 	
 	if(NewTable != NULL)
 	{
@@ -172,7 +172,7 @@ enum TP_ERROR_TYPES TP_TEST_CreateTPTableRow()
 {
 	printf("--|TP_TEST_CreateTPTableRow|--: ...");
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
-	TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase);
+	TPTable *NewTable = CreateTPTable("/TestTable", MainDatabase, TP_FALSE);
 	NewTable->ColCount = 2;
 	SetColumnTypes(NewTable, 2, TP_STRING, TP_STRING);
 	TPTable_Row *NewRow = CreateTPTableRow(0, NewTable);

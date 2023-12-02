@@ -58,7 +58,7 @@ void DestroyTPDatabase(TPDatabase *_self)
 enum TP_ERROR_TYPES AddTable(TPDatabase *_self, char *_Name)
 {
 	char *_path = TP_StrnCat("/", 1, _Name);
-	TPTable *newTbl = CreateTPTable(_path, _self);
+	TPTable *newTbl = CreateTPTable(_path, _self, TP_FALSE);
 	free(_path);
 
 	//AppendToArrayOfPointers((void***)&_self->Tables, &_self->TablesCount, newTbl, sizeof(TPTable*));

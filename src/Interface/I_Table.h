@@ -4,7 +4,7 @@
 #include "../TPDB_Global.h"
 #include "I_Database.h"
 
-TPTable *CreateTPTable(char *_Name, TPDatabase *_Database);
+TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows);
 void DestroyTPTable(TPTable *_self);
 
 enum TP_ERROR_TYPES SetColumnTypes(TPTable *_self, int _count, ...);
