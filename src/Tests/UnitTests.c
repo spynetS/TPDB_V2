@@ -254,6 +254,7 @@ int main()
 	TP_CheckError(TP_TEST_FreeArrayOfPointers(), TP_EXIT);
 
 	TP_CheckError(TP_Mkdir("./db"), TP_IGNORE);
+	TP_CheckError(TP_StoreFile("./db/test.txt", "TechP"), TP_EXIT);
 
 	TP_CheckError(TP_TEST_CreateTPDatabase(), TP_EXIT);
 	TP_CheckError(TP_TEST_CreateTPTable(), TP_EXIT);
