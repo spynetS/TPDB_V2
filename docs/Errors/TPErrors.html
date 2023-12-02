@@ -240,6 +240,36 @@
 						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
 					</p>
 				</div>
+
+				<div style="border-bottom: 2px dotted black; width: 100%; margin-bottom: 40px;"></div>
+
+				<div class="pl-8 mb-12">
+					<p id="502" class="text-lg font-bold">#502 TP_FAILED_STRNCATARRAY(char **_list, int _count, char *_separator)</p>
+					<p class="text-lg ml-10">
+						Function to dynamically concatonate multiple strings together.<br/>
+						<b>Args:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char**) String array.<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Int) How many strings in string array.<br/>
+						<span style="margin-left: 30px;"></span><b>-</b> (Char*) String (can be a single character) to append in between strings while joining.<br/><br/>
+
+						<pre class="w-full bg-slate-200 rounded-lg flex flex-col mb-6">
+							<code class="language-c line-numbers">
+								char **tempArray = (char**)malloc(sizeof(char*) * 2);
+								tempArray[0] = strdup("hello");
+								tempArray[1] = strdup("world!");
+
+								char *res = TP_StrnCatArray(tempArray, 2, " ");
+							</code>
+						</pre>
+
+						<b>Notes:</b><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure you are passing a constant string. ex: "hello".<br/>
+						<span style="margin-left: 42px;"></span>If you need to pass an allocated string, make sure to free it after<br/><br/>
+						<span style="margin-left: 30px;"></span><b>-</b> Make sure that the string array is correctly defined and is not NULL.<br/>
+						<span style="margin-left: 42px;"></span>If you want to replicate passing a NULL seperator, then use an empty string ("") || (" ").<br/><br/>
+						There are no more known reasons or bugs within this function, if it fails, report to the git repository.
+					</p>
+				</div>
 			</div>
 
 			<div class="flex flex-row w-full flex flex-col">

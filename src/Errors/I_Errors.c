@@ -6,7 +6,7 @@
 
 void TP_CheckError(enum TP_ERROR_TYPES err, int _exitOnError)
 {
-	if(err != TP_SUCCESS)
+	if(err != TP_SUCCESS && err != TP_FAILED_MKDIR)
 	{
 		int ErrorDocLinkSize = snprintf(NULL, 0, "firefox https://techpology.github.io/TPDB_V2/Errors/TPErrors.html?%d", err) + 1;
 		char *ErrorDocLink = (char*)malloc(sizeof(char) * ErrorDocLinkSize);

@@ -42,6 +42,24 @@ void DestroyTPTableRow(TPTable_Row *_self)
 	}
 }
 
+void EmptyRowValues(TPTable_Row *_self)
+{
+	if(_self != NULL)
+	{
+		if(_self->Values != NULL)
+		{
+			for (int i = 0; i < _self->ValCount; i++)
+			{
+				if(_self->Values[i] != NULL)
+				{
+					free(_self->Values[i]);
+					_self->Values[i] = NULL;
+				}
+			}
+		}
+	}
+}
+
 enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self)
 {
 	char *ToStore 	= TP_StrnCatArray(_self->Values, _self->ValCount, ";");
@@ -59,5 +77,6 @@ enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self)
 	free(idStr);
 	free(Path);
 	free(ToStore);
+	if(_parent->RowsOnDemand == TP_TRUE){ EmptyRowValues(_self); }
 	return TP_SUCCESS;
 }
