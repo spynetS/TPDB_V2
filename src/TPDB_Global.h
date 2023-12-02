@@ -7,6 +7,8 @@
 #define TP_EXIT 1
 #define TP_IGNORE 0
 
+#define TP_ROW_EXT ".tdf"
+
 enum TPTable_Column_Types
 {
 	TP_INT,

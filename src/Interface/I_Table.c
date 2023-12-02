@@ -32,6 +32,14 @@ void DestroyTPTable(TPTable *_self)
 {
 	if(_self != NULL)
 	{
+		if(_self->Rows != NULL)
+		{
+			for (int i = 0; i < _self->RowCount; i++)
+			{
+				DestroyTPTableRow(_self->Rows[i]);
+			}
+			free(_self->Rows);
+		}
 		if(_self->ColumnTypes != NULL)
 		{
 			free(_self->ColumnTypes);
@@ -114,11 +122,11 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 			default:
 				char *_charp = va_arg(args, char*);
 				_self->Rows[_self->RowCount - 1]->Values[i] = strdup(_charp);
-				free(_charp);
 				break;
 		}
 	}
 	va_end(args);
 
+	UpdateRow(_self, _self->Rows[_self->RowCount - 1]);
 	return TP_SUCCESS;
 }

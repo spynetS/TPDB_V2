@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 #include "../Errors/I_Errors.h"
+#include "../Utils/StringTools.h"
+#include "../Storage/Storage.h"
 #include "I_Row.h"
 
 TPTable_Row *CreateTPTableRow(int __ID, TPTable *_Table)
@@ -42,4 +44,20 @@ void DestroyTPTableRow(TPTable_Row *_self)
 
 enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self)
 {
+	char *ToStore 	= TP_StrnCatArray(_self->Values, _self->ValCount, ";");
+	if(ToStore == NULL){ return TP_FAILED_UPDATEROW; }
+
+	size_t idSize	= snprintf(NULL, 0, "/%d", _self->_ID) + 1;
+	char *idStr		= (char*) malloc(sizeof(char) * idSize);
+	sprintf(idStr, "/%d", _self->_ID);
+	if(idStr == NULL){ return TP_FAILED_UPDATEROW; }
+
+	char *Path		= TP_StrnCat(_parent->Path, 2, idStr, TP_ROW_EXT);
+	if(Path == NULL){ return TP_FAILED_UPDATEROW; }
+	TP_StoreFile(Path, ToStore);
+
+	free(idStr);
+	free(Path);
+	free(ToStore);
+	return TP_SUCCESS;
 }

@@ -261,5 +261,6 @@ int main()
 	TP_CheckError(TP_TEST_CreateTPTableRow(), TP_EXIT);
 
 	TP_CheckError(TP_TEST_AddTable(), TP_EXIT);
+	TP_CheckError(TP_TEST_AddRow(), TP_EXIT);
 	exit(0);
 }
