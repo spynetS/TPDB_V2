@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "StringTools.h"
+#include "../Errors/I_Errors.h"
 
 char *TP_StrnCat(char *_baseString, int _count, ...)
 {
@@ -63,4 +64,67 @@ char *TP_StrnCatArray(char **_list, int _count, char *_separator)
 	}
 
 	return retStr;
+}
+
+char **TP_SplitString(char *_str, char _separator, int *_returnCount)
+{
+	/*
+		I personally haven't seen this implementation before.
+		So I have to explain it so that opensource users can understand what it is I'm doing.
+
+		Count how many tokens (_separator) there are.
+		Allocate space for an integer array (int*) based on token instances found.
+		Run through the string again and store the index of all instances of said token (_separator).
+		Allocate space for a string array (char**) based on token instances found.
+
+		#approach 1
+		Increment to index[i] of token, set to '\0', and assign char* from -offset of index, to recent '\0'.
+		This way you dont allocate any memory more than the original string you wanted to split,
+		but still get to use it in a new data structure (char**). You only have to free (_str) and all members of
+		(char**) will be freed thanks to that. Saves time and memory.
+
+		#approach 2
+		Strndup from index[i - 1] to index[i]. Assign as new (char*) in (char**).
+	*/
+
+	int tokenCount = 0;
+	int _strLEN = strlen(_str);
+	for (int i = 0; i < _strLEN; i++)
+	{
+		if(_str[i] == _separator){ tokenCount++; }
+	}
+
+	if(tokenCount == 0){ TP_CheckError(TP_FAILED_SPLITSTRING, TP_IGNORE); return NULL; }
+
+	int *tokensIndex = (int*)malloc(sizeof(int) * tokenCount);
+
+	int j = 0;
+	for (int i = 0; i < _strLEN; i++)
+	{
+		if(_str[i] == _separator)
+		{
+			tokensIndex[j] = i;
+			j++;
+		}
+	}
+	j = -1;
+
+	char **ret = (char**)malloc(sizeof(char*) * (tokenCount + 1));
+
+	for (int i = 0; i < tokenCount; i++)
+	{
+		if(i == 0)
+		{
+			ret[i] = strndup(_str, tokensIndex[i]);
+		}
+		else
+		{
+			ret[i] = strndup(_str + tokensIndex[i - 1] + 1, (tokensIndex[i]) - (tokensIndex[i - 1]) - 1);
+		}
+	}
+	ret[tokenCount] = strndup(_str + tokensIndex[tokenCount - 1] + 1, _strLEN - tokensIndex[tokenCount - 2] - 1);
+	(*_returnCount) = tokenCount + 1;
+
+	free(tokensIndex);
+	return ret;
 }

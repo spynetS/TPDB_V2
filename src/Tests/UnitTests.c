@@ -63,6 +63,35 @@ enum TP_ERROR_TYPES TP_TEST_STRNCATARRAY()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_SPLITSTRING()
+{
+	char *tempStr = "hello,how,are,you, bro";
+
+	int splitCount = 0;
+	char **splitStr = TP_SplitString(tempStr, ',', &splitCount);
+	
+	if(strcmp(splitStr[0], "hello") == 0 && strcmp(splitStr[1], "how") == 0 && 
+	strcmp(splitStr[2], "are") == 0 && strcmp(splitStr[3], "you") == 0
+	)
+	{
+		for (int i = 0; i < splitCount; i++)
+		{
+			if(splitStr[i] != NULL){free(splitStr[i]); splitStr[i] = NULL;}
+		}
+		if(splitStr != NULL) { free(splitStr); }
+		return TP_SUCCESS;
+	}
+	else
+	{
+		for (int i = 0; i < splitCount; i++)
+		{
+			if(splitStr[i] != NULL){free(splitStr[i]); splitStr[i] = NULL;}
+		}
+		if(splitStr != NULL) { free(splitStr); }
+		return TP_FAILED_SPLITSTRING;
+	}
+}
+
 enum TP_ERROR_TYPES TP_TEST_AppendToArrayOfPointers()
 {
 	printf("--|TP_TEST_AppendToArrayOfPointers|--: ...");
@@ -249,6 +278,7 @@ int main()
 	puts("--|UnitTest|--");
 	TP_CheckError(TP_TEST_STRNCAT(), TP_EXIT);
 	TP_CheckError(TP_TEST_STRNCATARRAY(), TP_EXIT);
+	TP_CheckError(TP_TEST_SPLITSTRING(), TP_EXIT);
 
 	TP_CheckError(TP_TEST_AppendToArrayOfPointers(), TP_EXIT);
 	TP_CheckError(TP_TEST_FreeArrayOfPointers(), TP_EXIT);
