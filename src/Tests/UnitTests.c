@@ -255,6 +255,9 @@ int main()
 
 	TP_CheckError(TP_Mkdir("./db"), TP_IGNORE);
 	TP_CheckError(TP_StoreFile("./db/test.txt", "TechP"), TP_EXIT);
+	char *tempReadFile = TP_ReadFile("./db/test.txt");
+	if(strcmp(tempReadFile, "TechP") != 0){ free(tempReadFile); TP_CheckError(TP_FAILED_READFILE, TP_EXIT); }
+	free(tempReadFile);
 
 	TP_CheckError(TP_TEST_CreateTPDatabase(), TP_EXIT);
 	TP_CheckError(TP_TEST_CreateTPTable(), TP_EXIT);

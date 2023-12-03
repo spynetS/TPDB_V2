@@ -12,10 +12,11 @@
 TPDatabase *CreateTPDatabase(char *_Name, char *_Path)
 {
 	TPDatabase *newTPDB = (TPDatabase*)malloc(sizeof(TPDatabase));
+	newTPDB->_ID = 0;
 	newTPDB->Name = strdup(_Name);
 	newTPDB->Path = strdup(_Path);
+	
 	newTPDB->ConfigPath = TP_StrnCat(_Path, 1, "/Config");
-	newTPDB->_ID = 0;
 	newTPDB->TablesCount = 0;
 	newTPDB->Tables = NULL;
 

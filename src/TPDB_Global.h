@@ -1,5 +1,6 @@
 #ifndef TPDB_GLOBAL_H
 #define TPDB_GLOBAL_H
+#include <stdio.h>
 
 #define TP_TRUE 1
 #define TP_FALSE 0
@@ -42,6 +43,9 @@ typedef struct
 
 	int ColCount;
 	int RowCount;
+
+	int ColumnsToIndexCount;
+	int *ColumnsToIndex;
 
 	enum TPTable_Column_Types *ColumnTypes;
 	TPTable_Row **Rows;

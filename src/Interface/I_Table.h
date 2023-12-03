@@ -9,5 +9,6 @@ void DestroyTPTable(TPTable *_self);
 
 enum TP_ERROR_TYPES SetColumnTypes(TPTable *_self, int _count, ...);
 enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...);
+enum TP_ERROR_TYPES AddIndexColumn(TPTable *_self, int _col);
 
 #endif

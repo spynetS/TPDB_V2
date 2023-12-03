@@ -18,6 +18,9 @@ TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows)
 	newTPT->Name = strdup(_Name);
 	newTPT->Path = TP_StrnCat(_Database->Path, 1, newTPT->Name);
 
+	newTPT->ColumnsToIndex = NULL;
+	newTPT->ColumnsToIndexCount = 0;
+
 	newTPT->ColumnTypes = NULL;
 	
 	newTPT->ColCount = 0;
@@ -129,5 +132,26 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 	va_end(args);
 
 	UpdateRow(_self, _self->Rows[_self->RowCount - 1]);
+
+	// Index
+	if(_self->ColumnsToIndexCount > 0)
+	{
+		for (size_t i = 0; i < _self->ColumnsToIndexCount; i++)
+		{
+			int colIndex = _self->ColumnsToIndex[i];
+		}
+	}
+
+	return TP_SUCCESS;
+}
+
+enum TP_ERROR_TYPES AddIndexColumn(TPTable *_self, int _col)
+{
+	_self->ColumnsToIndex = realloc(_self->ColumnsToIndex, sizeof(int) * (_self->ColumnsToIndexCount + 1));
+	if(_self->ColumnsToIndex == NULL){ return TP_FAILED_AddIndexColumn; }
+
+	_self->ColumnsToIndex[_self->ColumnsToIndexCount] = _col;
+	_self->ColumnsToIndexCount++;
+
 	return TP_SUCCESS;
 }
