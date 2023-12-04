@@ -69,7 +69,7 @@ enum TP_ERROR_TYPES TP_TEST_SPLITSTRING()
 
 	int splitCount = 0;
 	char **splitStr = TP_SplitString(tempStr, ',', &splitCount);
-	
+
 	if(strcmp(splitStr[0], "hello") == 0 && strcmp(splitStr[1], "how") == 0 && 
 	strcmp(splitStr[2], "are") == 0 && strcmp(splitStr[3], "you") == 0
 	)
@@ -273,6 +273,34 @@ enum TP_ERROR_TYPES TP_TEST_AddRow()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
+{
+	printf("--|TP_TEST_InsertRowToIndexTable|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+	
+	AddTable(MainDatabase, "Users");
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	AddIndexColumn(MainDatabase->Tables[0], 2);
+
+	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
+
+	if(MainDatabase != NULL)
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_AddTable;
+	}
+}
+
 int main()
 {
 	puts("--|UnitTest|--");
@@ -295,5 +323,6 @@ int main()
 
 	TP_CheckError(TP_TEST_AddTable(), TP_EXIT);
 	TP_CheckError(TP_TEST_AddRow(), TP_EXIT);
+	TP_CheckError(TP_TEST_InsertRowToIndexTable(), TP_EXIT);
 	exit(0);
 }

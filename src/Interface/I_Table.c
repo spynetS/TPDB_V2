@@ -6,8 +6,11 @@
 #include "../Errors/I_Errors.h"
 #include "../Utils/StringTools.h"
 #include "../Utils/SerializeTools.h"
+#include "../Utils/MiscTools.h"
+#include "../Storage/Storage.h"
 #include "I_Table.h"
 #include "I_Row.h"
+#include "I_Indexing.h"
 
 TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows)
 {
@@ -20,11 +23,13 @@ TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows)
 
 	newTPT->ColumnsToIndex = NULL;
 	newTPT->ColumnsToIndexCount = 0;
+	newTPT->ColumnsIndexOffset = 1000;
 
 	newTPT->ColumnTypes = NULL;
 	
 	newTPT->ColCount = 0;
 	newTPT->RowCount = 0;
+	newTPT->LastRowID = 0;
 
 	newTPT->Rows = NULL;
 	newTPT->RowsOnDemand = _lazyLoadRows;
@@ -36,6 +41,8 @@ void DestroyTPTable(TPTable *_self)
 {
 	if(_self != NULL)
 	{
+		free(_self->ColumnsToIndex);
+		_self->ColumnsToIndexCount = 0;
 		if(_self->Rows != NULL)
 		{
 			for (int i = 0; i < _self->RowCount; i++)
@@ -92,8 +99,9 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 
 	if(_self->Rows != NULL)
 	{
-		_self->Rows[_self->RowCount] = CreateTPTableRow(_self->RowCount, _self);
+		_self->Rows[_self->RowCount] = CreateTPTableRow(_self->LastRowID, _self);
 		_self->RowCount++;
+		_self->LastRowID++;
 	}
 	else
 	{
@@ -139,6 +147,14 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 		for (size_t i = 0; i < _self->ColumnsToIndexCount; i++)
 		{
 			int colIndex = _self->ColumnsToIndex[i];
+			if(_self->ColumnTypes[colIndex] == TP_INT || _self->ColumnTypes[colIndex] == TP_FLOAT)
+			{
+				char *targetRangeStr = TP_GetIntRangeStr(_self->ColumnsIndexOffset, atoi(_self->Rows[_self->RowCount - 1]->Values[colIndex]));
+				puts(targetRangeStr);
+				TP_CheckError(TP_InsertRowToIndexTable(_self, _self->Rows[_self->RowCount - 1], targetRangeStr, colIndex), TP_EXIT);
+				free(targetRangeStr);
+			}
+			// No string indexing implementation. Later update.
 		}
 	}
 

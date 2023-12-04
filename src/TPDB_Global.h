@@ -43,7 +43,9 @@ typedef struct
 
 	int ColCount;
 	int RowCount;
+	int LastRowID;
 
+	int ColumnsIndexOffset;
 	int ColumnsToIndexCount;
 	int *ColumnsToIndex;
 

@@ -62,6 +62,12 @@ enum TP_ERROR_TYPES AddTable(TPDatabase *_self, char *_Name)
 	TPTable *newTbl = CreateTPTable(_path, _self, TP_FALSE);
 	free(_path);
 
+	size_t TableConfigFolderPathSize = snprintf(NULL, 0, "%s%s", _self->ConfigPath, newTbl->Name) + 1;
+	char * TableConfigFolderPath = (char*)malloc(sizeof(char) * TableConfigFolderPathSize);
+	sprintf(TableConfigFolderPath, "%s%s", _self->ConfigPath, newTbl->Name);
+	TP_Mkdir(TableConfigFolderPath);
+	free(TableConfigFolderPath); TableConfigFolderPath = NULL;
+
 	//AppendToArrayOfPointers((void***)&_self->Tables, &_self->TablesCount, newTbl, sizeof(TPTable*));
 	_self->Tables = realloc(_self->Tables, sizeof(TPTable*) * (_self->TablesCount + 1));
 	_self->Tables[_self->TablesCount] = newTbl;
