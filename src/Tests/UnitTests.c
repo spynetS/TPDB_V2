@@ -38,6 +38,7 @@ enum TP_ERROR_TYPES TP_TEST_STRNCAT()
 
 enum TP_ERROR_TYPES TP_TEST_STRNCATARRAY()
 {
+	printf("--|TP_TEST_STRNCATARRAY|--: ...");
 	char **tempArray = (char**)malloc(sizeof(char*) * 2);
 	tempArray[0] = strdup("hello");
 	tempArray[1] = strdup("world!");
@@ -51,6 +52,8 @@ enum TP_ERROR_TYPES TP_TEST_STRNCATARRAY()
 		free(tempArray[0]);
 		free(tempArray);
 		free(res);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
 		return TP_SUCCESS;
 	}
 	else
@@ -59,12 +62,15 @@ enum TP_ERROR_TYPES TP_TEST_STRNCATARRAY()
 		free(tempArray[0]);
 		free(tempArray);
 		free(res);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
 		return TP_FAILED_STRNCATARRAY;
 	}
 }
 
 enum TP_ERROR_TYPES TP_TEST_SPLITSTRING()
 {
+	printf("--|TP_TEST_SPLITSTRING|--: ...");
 	char *tempStr = "hello,how,are,you, bro";
 
 	int splitCount = 0;
@@ -79,6 +85,8 @@ enum TP_ERROR_TYPES TP_TEST_SPLITSTRING()
 			if(splitStr[i] != NULL){free(splitStr[i]); splitStr[i] = NULL;}
 		}
 		if(splitStr != NULL) { free(splitStr); }
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
 		return TP_SUCCESS;
 	}
 	else
@@ -88,6 +96,8 @@ enum TP_ERROR_TYPES TP_TEST_SPLITSTRING()
 			if(splitStr[i] != NULL){free(splitStr[i]); splitStr[i] = NULL;}
 		}
 		if(splitStr != NULL) { free(splitStr); }
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
 		return TP_FAILED_SPLITSTRING;
 	}
 }

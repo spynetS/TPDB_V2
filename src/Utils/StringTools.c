@@ -108,7 +108,6 @@ char **TP_SplitString(char *_str, char _separator, int *_returnCount)
 		}
 	}
 	j = -1;
-
 	char **ret = (char**)malloc(sizeof(char*) * (tokenCount + 1));
 
 	for (int i = 0; i < tokenCount; i++)
@@ -122,7 +121,8 @@ char **TP_SplitString(char *_str, char _separator, int *_returnCount)
 			ret[i] = strndup(_str + tokensIndex[i - 1] + 1, (tokensIndex[i]) - (tokensIndex[i - 1]) - 1);
 		}
 	}
-	ret[tokenCount] = strndup(_str + tokensIndex[tokenCount - 1] + 1, _strLEN - tokensIndex[tokenCount - 2] - 1);
+	ret[tokenCount] = strndup(_str + tokensIndex[tokenCount - 1] + 1, 
+		(tokenCount > 1) ? _strLEN - tokensIndex[tokenCount - 2] - 1 : _strLEN - tokensIndex[tokenCount - 1] - 1);
 	(*_returnCount) = tokenCount + 1;
 
 	free(tokensIndex);

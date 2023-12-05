@@ -42,6 +42,8 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 				TargetLineInIndex = i;
 				int TempKeyValCount = 0;
 				char **TempKeyVal = TP_SplitString(IndexTableLines[i], ':', &TempKeyValCount);
+				puts(TempKeyVal[0]);
+				puts(TempKeyVal[1]);
 				puts("$$$$ FOUND $$$$");
 				Vals = strdup(TempKeyVal[1]);
 
@@ -91,7 +93,7 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	}
 	TP_CheckError(TP_StoreFile(IndexTablePath, NewIndexTableFile), TP_EXIT);
 
-	if(IndexTableLinesCount > 0){ FreeArrayOfPointers(&IndexTableLines, IndexTableLinesCount); }
+	if(IndexTableLinesCount > 0 && IndexTableLines != NULL){ free(IndexTableLines);/* FreeArrayOfPointers((void***)&IndexTableLines, IndexTableLinesCount); */ }
 	free(ValsComplete); ValsComplete = NULL;
 	if(strcmp(Vals, "") != 0){ free(Vals); Vals = NULL; }
 	free(RowIdStr); RowIdStr = NULL;
