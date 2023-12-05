@@ -39,11 +39,17 @@ char *TP_ReadFile(char* _path)
 	size_t fLen = ftell(f);
 	rewind(f);
 
+	if(fLen <= 0)
+	{
+		fclose(f);
+		return "";
+	}
+
 	char *ret = (char*)malloc(sizeof(char) * (fLen + 1));
 	
 	if(fread(ret, 1, fLen, f) != fLen)
 	{
-		free(ret);
+		free(ret); ret = NULL;
 		fclose(f);
 		TP_CheckError(TP_FAILED_READFILE, TP_EXIT);
 	}

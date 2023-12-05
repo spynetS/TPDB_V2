@@ -141,7 +141,8 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 
 	UpdateRow(_self, _self->Rows[_self->RowCount - 1]);
 
-	// Index
+	// ########### Index ########### //
+	
 	if(_self->ColumnsToIndexCount > 0)
 	{
 		for (size_t i = 0; i < _self->ColumnsToIndexCount; i++)
@@ -150,7 +151,6 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 			if(_self->ColumnTypes[colIndex] == TP_INT || _self->ColumnTypes[colIndex] == TP_FLOAT)
 			{
 				char *targetRangeStr = TP_GetIntRangeStr(_self->ColumnsIndexOffset, atoi(_self->Rows[_self->RowCount - 1]->Values[colIndex]));
-				puts(targetRangeStr);
 				TP_CheckError(TP_InsertRowToIndexTable(_self, _self->Rows[_self->RowCount - 1], targetRangeStr, colIndex), TP_EXIT);
 				free(targetRangeStr);
 			}

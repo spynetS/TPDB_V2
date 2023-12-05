@@ -94,7 +94,7 @@ char **TP_SplitString(char *_str, char _separator, int *_returnCount)
 		if(_str[i] == _separator){ tokenCount++; }
 	}
 
-	if(tokenCount <= 0){ TP_CheckError(TP_FAILED_SPLITSTRING, TP_IGNORE); puts("No token found. {SplitString}"); return NULL; }
+	if(tokenCount <= 0){ TP_CheckError(TP_FAILED_SPLITSTRING, TP_IGNORE); return NULL; }
 
 	int *tokensIndex = (int*)malloc(sizeof(int) * tokenCount);
 

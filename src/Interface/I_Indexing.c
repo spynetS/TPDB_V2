@@ -42,14 +42,11 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 				TargetLineInIndex = i;
 				int TempKeyValCount = 0;
 				char **TempKeyVal = TP_SplitString(IndexTableLines[i], ':', &TempKeyValCount);
-				puts(TempKeyVal[0]);
-				puts(TempKeyVal[1]);
-				puts("$$$$ FOUND $$$$");
 				Vals = strdup(TempKeyVal[1]);
 
-				free(TempKeyVal[1]);
-				free(TempKeyVal[0]);
-				free(TempKeyVal);
+				free(TempKeyVal[1]); TempKeyVal[1] = NULL;
+				free(TempKeyVal[0]); TempKeyVal[0] = NULL;
+				free(TempKeyVal); TempKeyVal = NULL;
 				break;
 			}
 		}
@@ -77,7 +74,14 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	}
 	else
 	{
-		IndexTableLines = realloc(IndexTableLines, sizeof(char*) * (IndexTableLinesCount + 1));
+		if(IndexTableLines == NULL)
+		{
+			IndexTableLines = malloc(sizeof(char*) * 1);
+		}
+		else
+		{
+			IndexTableLines = realloc(IndexTableLines, sizeof(char*) * (IndexTableLinesCount + 1));
+		}
 		IndexTableLines[IndexTableLinesCount] = ToInsert;
 		IndexTableLinesCount++;
 	}
@@ -85,7 +89,7 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	char *NewIndexTableFile;
 	if(IndexTableLinesCount <= 1)
 	{
-		NewIndexTableFile = ToInsert;
+		NewIndexTableFile = strdup(ToInsert);
 	}
 	else
 	{
@@ -93,11 +97,24 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	}
 	TP_CheckError(TP_StoreFile(IndexTablePath, NewIndexTableFile), TP_EXIT);
 
-	if(IndexTableLinesCount > 0 && IndexTableLines != NULL){ free(IndexTableLines);/* FreeArrayOfPointers((void***)&IndexTableLines, IndexTableLinesCount); */ }
-	free(ValsComplete); ValsComplete = NULL;
-	if(strcmp(Vals, "") != 0){ free(Vals); Vals = NULL; }
-	free(RowIdStr); RowIdStr = NULL;
-	free(NewIndexTableFile); NewIndexTableFile = NULL;
-	free(IndexTablePath); IndexTablePath = NULL;
+	if(IndexTableLines != NULL)
+	{
+		for (int i = 0; i < IndexTableLinesCount; i++)
+		{
+			if(IndexTableLines[i] != NULL){ free(IndexTableLines[i]); IndexTableLines[i] = NULL; }
+		}
+		free(IndexTableLines);
+		IndexTableLines = NULL;
+	}
+
+	if(ValsComplete != NULL){ free(ValsComplete); ValsComplete = NULL; }
+	if(Vals != NULL && strcmp(Vals, "") != 0){ free(Vals); Vals = NULL; }
+	
+	if(TargetLineInIndex != -1 && RowIdStr != NULL){free(RowIdStr); RowIdStr = NULL;}
+	
+	if(NewIndexTableFile != NULL){free(NewIndexTableFile); NewIndexTableFile = NULL;}
+
+	if(IndexTablePath != NULL){free(IndexTablePath); IndexTablePath = NULL;}
+	
 	return TP_SUCCESS;
 }
