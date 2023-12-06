@@ -58,7 +58,7 @@ run
 this will run the commands above at after one another
 
 ## TODO
-- [ x ] Add codeblocks
+- [x] Add codeblocks
 
 
 
