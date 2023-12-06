@@ -28,6 +28,16 @@ def create(args):
     desc=input("What description? ")
 
     args = getList("What args? ")
+
+    try:
+        amount_of_code_snippets = int(input("How many code snippets? (0 defualt)"))
+    except:
+        amount_of_code_snippets = 0
+
+    code_snippets = []
+    for i in range(amount_of_code_snippets):
+        code_snippets.append(getList("What code snippets?"))
+
     notes = getList("What notes? ")
 
     footer=input("What footer? ")
@@ -37,6 +47,7 @@ def create(args):
     print(title)
     print(desc)
     print(args)
+    print(code_snippets)
     print(notes)
     print(footer)
 
@@ -47,6 +58,7 @@ def create(args):
                 "title":title,
                 "Desc":desc,
                 "Args":args,
+                "code_snippets":code_snippets,
                 "Notes":notes,
                 "Footer":footer
             }

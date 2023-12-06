@@ -47,7 +47,10 @@ noteComp = '''<span style="margin-left: 30px;"></span><b>-</b> NOTE <br/><br/>''
 def getCodes(codes):
     code_snippets = ""
     for code in codes:
-        code_snippets+=f"{codeComp.replace('CONTENT',code['content'])}\n"
+        lines = ""
+        for line in code:
+            lines += line+"\n"
+        code_snippets+=f'{codeComp.replace("CONTENT",lines)}\n'
     return code_snippets
 
 def getNotes(notes):
