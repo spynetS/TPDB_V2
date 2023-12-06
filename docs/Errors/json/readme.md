@@ -40,7 +40,7 @@ FOOTER
 ```
 then run
 ```
-cat input.txt | ./errorMaker creater
+cat input.txt | ./errorMaker create
 ```
 
 
