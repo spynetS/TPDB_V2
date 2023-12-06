@@ -6,7 +6,8 @@ mainComp = '''
 <div class="flex flex-row w-full flex flex-col">
   <h3 id="ID" class="text-2xl mb-4">TITLE1</h3>
   COMPS
-</div>'''
+</div>
+'''
 
 subComp = '''
     <div class="pl-8 mb-12">
@@ -27,6 +28,8 @@ subComp = '''
     </p>
   </div>
 '''
+
+subcomp_divider = '<div style="border-bottom: 2px dotted black; width: 100%; margin-bottom: 40px;"></div>'
 
 argComp = '''
       <b>-</b>ARG<br/>
@@ -67,24 +70,37 @@ def getArgs(args):
 
 def getSubs(subs):
     subcomps = ""
+    count = 0
     for sub in subs:
         print("set title")
         subcomp = subComp.replace("TITLE2",sub["title"])
+
         print("set id")
         subcomp = subcomp.replace("ID",sub["title"].split(" ")[0][1:])
+
         print("set desv")
         subcomp = subcomp.replace("DESCRIPTION",sub["Desc"].replace("\n","<br>"))
+
         print("set args")
         subcomp = subcomp.replace("ARGS",getArgs(sub["Args"]))
         if "code_snippets" in sub:
             print("set code snippets")
             subcomp = subcomp.replace("CODE_SNIPPETS",getCodes(sub["code_snippets"]))
+
         print("set notes")
         subcomp = subcomp.replace("NOTES",getNotes(sub["Notes"]))
+
         print("set footer")
         subcomp = subcomp.replace("FOOTER",sub["Footer"].replace("\n","<br>"))
+
         print("add sub comp")
         subcomps += (subcomp)
+        # add divider for all but the last
+        if count < len(subs)-1:
+            subcomps+=subcomp_divider
+
+        count +=1
+
     return subcomps
 
 def getMainComp(main):
