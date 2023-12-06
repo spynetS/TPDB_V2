@@ -296,6 +296,7 @@ enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
 	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
 	AddRow(MainDatabase->Tables[0], 3, "Alfred", "asd", 2);
 	AddRow(MainDatabase->Tables[0], 3, "ludde", "ass", 23);
+	AddRow(MainDatabase->Tables[0], 3, "lukass", "ad", 60);
 
 	if(MainDatabase != NULL)
 	{

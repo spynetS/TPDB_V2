@@ -14,9 +14,10 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	char * IndexTablePath = (char*)malloc(sizeof(char) * IndexTablePathSize);
 	sprintf(IndexTablePath, "%s%s/%d.cif", _Table->ParentDatabase->ConfigPath, _Table->Name, _ColIndex);
 
-	char *IndexTableStr = "";
+	char *IndexTableStr = strdup("");
 	if(access(IndexTablePath, F_OK) == 0)
 	{
+		free(IndexTableStr);
 		IndexTableStr = TP_ReadFile(IndexTablePath);
 	}
 
@@ -31,7 +32,7 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 		if(IndexTableLines == NULL)
 		{
 			IndexTableLines = (char**)malloc(sizeof(char*));
-			IndexTableLines[0] = IndexTableStr;
+			IndexTableLines[0] = strdup(IndexTableStr);
 			IndexTableLinesCount = 1;
 		}
 
@@ -110,11 +111,12 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	if(ValsComplete != NULL){ free(ValsComplete); ValsComplete = NULL; }
 	if(Vals != NULL && strcmp(Vals, "") != 0){ free(Vals); Vals = NULL; }
 	
-	if(TargetLineInIndex != -1 && RowIdStr != NULL){free(RowIdStr); RowIdStr = NULL;}
+	if(TargetLineInIndex != -1 && RowIdStr != NULL){ free(RowIdStr); RowIdStr = NULL; }
 	
-	if(NewIndexTableFile != NULL){free(NewIndexTableFile); NewIndexTableFile = NULL;}
+	if(NewIndexTableFile != NULL){ free(NewIndexTableFile); NewIndexTableFile = NULL; }
 
-	if(IndexTablePath != NULL){free(IndexTablePath); IndexTablePath = NULL;}
+	if(IndexTablePath != NULL){ free(IndexTablePath); IndexTablePath = NULL; }
+	if(IndexTableStr != NULL){ free(IndexTableStr); IndexTableStr = NULL; }
 	
 	return TP_SUCCESS;
 }

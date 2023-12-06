@@ -56,7 +56,7 @@ fi
 
 #echo "${projectRunC} ${completeCPaths[@]}"
 #gcc $projectRunC -o $runPath
-gcc $projectRunC "${completeCPaths[@]}" -o $runPath -lm
+gcc $projectRunC "${completeCPaths[@]}" -o $runPath -lm -g
 
 if [ $isValgrind = true ]; then
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --read-inline-info=yes -s $runPath
