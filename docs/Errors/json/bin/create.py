@@ -64,7 +64,6 @@ def create(args):
             }
 
             error = isMainCodeInErrors(data["errors"],mainCode)
-            print(error)
             if error >= 0:
                 data["errors"][error]["sub"].append(sub)
             else:
@@ -75,5 +74,5 @@ def create(args):
                     ]
                 })
 
-                with open(path,"w") as f:
-                    json.dump(data,f,indent=4)
+            with open(path,"w") as f:
+                json.dump(data,f,indent=4)
