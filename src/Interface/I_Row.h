@@ -6,4 +6,6 @@
 TPTable_Row *CreateTPTableRow(int __ID, TPTable *_Table);
 void DestroyTPTableRow(TPTable_Row *_self);
 
+enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self);
+
 #endif

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "MiscTools.h"
 
@@ -59,4 +60,45 @@ enum TP_ERROR_TYPES FreeArrayOfPointers(void ***targetArray, size_t targetArrayL
 	{
 		return TP_FAILED_FreeArrayOfPointers;
 	}
+}
+
+/* enum TP_ERROR_TYPES AppendToArrayOfPointers(void ***targetArray, size_t *targetArrayLength, void *ToAppend, size_t elementSize)
+{
+    void **newArray = NULL;
+
+    if ((*targetArray) == NULL)
+    {
+        newArray = malloc(elementSize);
+    }
+    else
+    {
+        newArray = realloc((*targetArray), elementSize * ((*targetArrayLength) + 1));
+    }
+
+    if (newArray == NULL)
+    {
+        return TP_FAILED_AppendToArrayOfPointers; // Allocation failure
+    }
+
+    // Copy the new element
+    memcpy(newArray[*targetArrayLength], ToAppend, elementSize);
+
+    // Update the array and length
+    *targetArray = newArray;
+    (*targetArrayLength)++;
+
+    return TP_SUCCESS;
+}
+ */
+
+char* TP_GetIntRangeStr(int _offset, int _val)
+{
+	int i = floor(_val/_offset) * _offset;
+	int j = i + _offset;
+	
+	size_t retSize = snprintf(NULL, 0, "%d-%d", i, j) + 1;
+	char* ret = (char*)malloc(sizeof(char) * retSize);
+	sprintf(ret, "%d-%d", i, j);
+
+	return ret;
 }

@@ -24,7 +24,7 @@ appendPrefix() {
 }
 
 UtilsPath="./src/Utils/"
-UtilsC=("StringTools.c" "MiscTools.c")
+UtilsC=("StringTools.c" "MiscTools.c" "SerializeTools.c")
 UtilsRelative=$(appendPrefix "UtilsC" "${UtilsPath}")
 
 ErrorsPath="./src/Errors/"
@@ -36,7 +36,7 @@ StorageC=("Storage.c")
 StorageRelative=$(appendPrefix "StorageC" "${StoragePath}")
 
 InterfacePath="./src/Interface/"
-InterfaceC=("I_Database.c" "I_Row.c" "I_Table.c")
+InterfaceC=("I_Database.c" "I_Row.c" "I_Table.c" "I_Indexing.c")
 InterfaceRelative=$(appendPrefix "InterfaceC" "${InterfacePath}")
 
 completeCPaths=($UtilsRelative $ErrorsRelative $StorageRelative $InterfaceRelative)
@@ -56,7 +56,7 @@ fi
 
 #echo "${projectRunC} ${completeCPaths[@]}"
 #gcc $projectRunC -o $runPath
-gcc $projectRunC "${completeCPaths[@]}" -o $runPath
+gcc $projectRunC "${completeCPaths[@]}" -o $runPath -lm -g
 
 if [ $isValgrind = true ]; then
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --read-inline-info=yes -s $runPath
