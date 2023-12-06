@@ -5,7 +5,7 @@
 #include "../Errors/I_Errors.h"
 #include "../Storage/Storage.h"
 #include "../Utils/StringTools.h"
-#include "../Utils/MISCTools.h"
+#include "../Utils/MiscTools.h"
 #include "I_Database.h"
 #include "I_Table.h"
 

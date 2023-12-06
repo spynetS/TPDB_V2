@@ -34,6 +34,9 @@ TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows)
 	newTPT->Rows = NULL;
 	newTPT->RowsOnDemand = _lazyLoadRows;
 
+
+	TP_CheckError(TP_Mkdir(TP_StrnCat(_Database->Path, 2, "/",_Name)), TP_EXIT);
+
 	return newTPT;
 }
 
