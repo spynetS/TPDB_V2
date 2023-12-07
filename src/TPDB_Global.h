@@ -15,11 +15,11 @@
 
 enum TPTable_Column_Types
 {
-	TP_INT,
-	TP_FLOAT,
-	TP_STRING,
-	TP_CHAR,
-	TP_FKEY
+	TP_INT=1,
+	TP_FLOAT=2,
+	TP_STRING=3,
+	TP_CHAR=4,
+	TP_FKEY=5
 };
 
 typedef struct

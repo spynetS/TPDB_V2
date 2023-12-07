@@ -15,6 +15,8 @@
 #include "./Interface/I_Row.h"
 #include "TPDB_Global.h"
 
+#include <stdarg.h>
+
 int Main_Ali_Test()
 {
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
@@ -40,23 +42,38 @@ int Main_Ali_Test()
 	return 0;
 }
 
+
+void save_model(void* model, enum TPTable_Column_Types first, ...) {
+    va_list args;
+    enum TPTable_Column_Types value;
+
+    va_start(args, first);
+
+    // Process variable arguments until a sentinel value is encountered
+    while ((value = va_arg(args, enum TPTable_Column_Types)) != -1) {
+        printf("Next Argument: %d\n", value);
+    }
+
+    va_end(args);
+}
+
+typedef struct {
+	TPTable *mytable;
+	void *model;
+
+} ModelHolder;
+
+typedef struct {
+	char *name;
+	int age;
+} User;
+
 int main()
 {
-	Main_Ali_Test();
-	return 0;
-
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 
-	AddTable(MainDatabase, "Users");
-	SetColumnTypes(MainDatabase->Tables[0], 4, TP_STRING,TP_STRING,TP_INT, TP_FKEY);
-
-	AddRow(MainDatabase->Tables[0], 4, "Ali", "123", 22,NULL);
-
-	TPForeignKey fkey = {"Users", 0};
-	AddRow(MainDatabase->Tables[0], 4, "Alfred", "123", 22, &fkey);
-
-	char *str = MainDatabase->Tables[0]->Rows[0]->Values[0];
-	puts(str);
+	User alfred = {"Alfred", 180};
+	save_model(&alfred, TP_STRING, TP_INT);
 
 	DestroyTPDatabase(MainDatabase);
 	return 0;
