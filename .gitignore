@@ -1,2 +1,5 @@
-db/*
+db/
 docs/Errors/json/bin/__pycache__
+db
+build/run
+build/test
