@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 
 #include "../Errors/I_Errors.h"
@@ -111,4 +112,65 @@ void *GetRowValue(TPTable *table,TPTable_Row *row, int column){
 	}
 
 	return NULL;
+}
+
+enum TP_ERROR_TYPES SetRowValues(TPTable *_parent, TPTable_Row *_self, int _count, ...)
+{
+	va_list args;
+	va_start(args, _count);
+
+	for (int i = 0; i < _parent->ColCount; i++)
+	{
+		switch (_parent->ColumnTypes[i])
+		{
+			case TP_INT:
+				int IntVal = va_arg(args, int);
+				if(IntVal != TP_KEEP_ROW_VAL_NUM)
+				{
+					free(_self->Values[i]);
+					_self->Values[i] = SERIALIZE_Int_Str(IntVal);
+				}
+				break;
+			case TP_FLOAT:
+				double FloatVal = va_arg(args, double);
+				if(FloatVal != TP_KEEP_ROW_VAL_NUM)
+				{
+					free(_self->Values[i]);
+					_self->Values[i] = SERIALIZE_Float_Str(FloatVal);
+				}
+				break;
+			case TP_CHAR:
+				unsigned char CharVal = (unsigned char)va_arg(args, int);
+				if(CharVal != TP_KEEP_ROW_VAL_NUM)
+				{
+					free(_self->Values[i]);
+					_self->Values[i] = SERIALIZE_Char_Str(CharVal);
+				}
+				break;
+			case TP_FKEY:
+				TPForeignKey *FKeyVal = va_arg(args, TPForeignKey*);
+				if(FKeyVal != TP_KEEP_ROW_VAL_PTR)
+				{
+					free(_self->Values[i]);
+					_self->Values[i] = SERIALIZE_Fkey_Str(FKeyVal);
+				}
+				break;
+			default:
+				char *StrVal = va_arg(args, char*);
+				if(StrVal != TP_KEEP_ROW_VAL_PTR)
+				{
+					free(_self->Values[i]);
+					StrVal = strdup(StrVal);
+					_self->Values[i] = StrVal;
+				}
+				break;
+		}
+		if(_self->Values[i] == NULL)
+		{
+			va_end(args);
+			return TP_FAILED_SetRowValues;
+		}
+	}
+	va_end(args);
+	return TP_SUCCESS;
 }
