@@ -12,4 +12,6 @@ float *SERIALIZE_Str_Float(char *str);
 /** Returns a pointer to a row retrived from the forienkey */
 TPTable_Row *SERIALIZE_Str_Row(TPDatabase *database,char *str);
 
+char *SERIALIZE_RowID_Path(TPTable *_tbl, int _id);
+
 #endif

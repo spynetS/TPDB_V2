@@ -89,4 +89,12 @@ TPTable_Row *SERIALIZE_Str_Row(TPDatabase *database,char *str)
 
 
 	return returnRow;
+
+char *SERIALIZE_RowID_Path(TPTable *_tbl, int _id)
+{
+	size_t retSize = snprintf(NULL, 0, "%s/%d.tdf", _tbl->Path, _id) + 1;
+	char *ret = (char*)malloc(sizeof(char) * retSize);
+	sprintf(ret, "%s/%d.tdf", _tbl->Path, _id);
+	return ret;
+>>>>>>> 82a9107bdd6d36e0bfad8c120e312fd356e5e1a8
 }

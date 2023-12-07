@@ -34,8 +34,7 @@ TPTable *CreateTPTable(char *_Name, TPDatabase *_Database, int _lazyLoadRows)
 	newTPT->Rows = NULL;
 	newTPT->RowsOnDemand = _lazyLoadRows;
 
-
-	TP_CheckError(TP_Mkdir(TP_StrnCat(_Database->Path, 2, "/",_Name)), TP_EXIT);
+	TP_CheckError(TP_Mkdir(newTPT->Path), TP_EXIT);
 
 	return newTPT;
 }
@@ -181,6 +180,25 @@ enum TP_ERROR_TYPES AddIndexColumn(TPTable *_self, int _col)
 	return TP_SUCCESS;
 }
 
-enum TP_ERROR_TYPES GetRow(TPTable *_self, int _row)
+TPTable_Row *GetRow(TPTable *_self, int _row)
 {
+	if(_self->RowsOnDemand == TP_FALSE)
+	{
+		return _self->Rows[_row];
+	}
+
+	char *RowPath = SERIALIZE_RowID_Path(_self, _row);
+	char *RowStr  = TP_ReadFile(RowPath);
+	char **RowSplit = TP_SplitString(RowStr, ';', NULL);
+
+	for (int i = 0; i < _self->ColCount; i++)
+	{
+		_self->Rows[_row]->Values[i] = strdup(RowSplit[i]);
+	}
+	_self->Rows[_row]->ValCount = _self->ColCount;
+
+	if(RowPath != NULL){ free(RowPath); RowPath = NULL; }
+	if(RowStr != NULL){ free(RowStr); RowStr = NULL; }
+	if(RowSplit != NULL){ FreeArrayOfPointers(&RowSplit, _self->ColCount); }
+	return _self->Rows[_row];
 }
