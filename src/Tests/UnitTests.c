@@ -5,6 +5,7 @@
 
 #include "../Errors/I_Errors.h"
 #include "../Utils/StringTools.h"
+#include "../Utils/SerializeTools.h"
 #include "../Utils/MiscTools.h"
 
 #include "../Storage/Storage.h"
@@ -315,6 +316,90 @@ enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_SERIALIZE_Str_Int()
+{
+	printf("--|TP_TEST_SERIALIZE_Str_Int|--: ...");
+	char *value = "10";
+	int *intValue = SERIALIZE_Str_Int(value);
+	char *value1 = "-10";
+	int *intValue1 = SERIALIZE_Str_Int(value1);
+	if((*intValue) == 10 && (*intValue1) == -10)
+	{
+		free(intValue);
+		free(intValue1);
+		printf("%s\n",ERROR_ASCII_SUCCESS);
+		return TP_SUCCESS;
+	}
+	else
+	{
+		free(intValue);
+		free(intValue1);
+		printf("%s\n",ERROR_ASCII_FAIL);
+		return TP_FAILED_SERIALIZE_STR_INT;
+	}
+
+}
+enum TP_ERROR_TYPES TP_TEST_SERIALIZE_Str_Float()
+{
+	printf("--|TP_TEST_SERIALIZE_Str_Float|--: ...");
+	char *value = "10";
+	float *floatValue = SERIALIZE_Str_Float(value);
+
+	char *value1 = "-10";
+	float *floatValue1 = SERIALIZE_Str_Float(value1);
+	if((*floatValue) == 10 && (*floatValue1) == -10)
+	{
+		free(floatValue);
+		free(floatValue1);
+		printf("%s\n",ERROR_ASCII_SUCCESS);
+		return TP_SUCCESS;
+	}
+	else
+	{
+		free(floatValue);
+		free(floatValue1);
+		printf("%s\n",ERROR_ASCII_FAIL);
+		return TP_FAILED_SERIALIZE_STR_FLOAT;
+	}
+
+}
+
+
+enum TP_ERROR_TYPES TP_TEST_GETROWVALUE(){
+	printf("--|TP_TEST_TP_TEST_GETROWVALUE|--: ...\n");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+
+	AddTable(MainDatabase, "Users");
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
+
+	TPTable_Row *row = MainDatabase->Tables[0]->Rows[0];
+	char *name = (char*)GetRowValue(MainDatabase->Tables[0], row, 0);
+	int *age = (int*)GetRowValue(MainDatabase->Tables[0], row, 2);
+	free(name);
+	free(age);
+
+	if(strcmp(name,"Ali") == 0 && (*age) == 22)
+	{
+		free(name);
+		free(age);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		free(name);
+		free(age);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_GETROWVALUE;
+	}
+
+}
+
 int main()
 {
 	puts("--|UnitTest|--");
@@ -338,5 +423,11 @@ int main()
 	TP_CheckError(TP_TEST_AddTable(), TP_EXIT);
 	TP_CheckError(TP_TEST_AddRow(), TP_EXIT);
 	TP_CheckError(TP_TEST_InsertRowToIndexTable(), TP_EXIT);
+
+	TP_CheckError(TP_TEST_SERIALIZE_Str_Int(), TP_EXIT);
+	TP_CheckError(TP_TEST_SERIALIZE_Str_Float(), TP_EXIT);
+
+	TP_CheckError(TP_TEST_GETROWVALUE(), TP_EXIT);
+
 	exit(0);
 }
