@@ -43,37 +43,86 @@ int Main_Ali_Test()
 }
 
 
-void save_model(void* model, enum TPTable_Column_Types first, ...) {
-    va_list args;
-    enum TPTable_Column_Types value;
 
-    va_start(args, first);
+void** getTypeValueList(TPTable *table, int _row)
+{
+	void **values = malloc(sizeof(void*)*table->ColCount);
+	TPTable_Row *row = GetRow(table, _row);
+	for(int i = 0; i < table->ColCount; i ++){
+		/* Create a copy of the value */
+		void *gval = GetRowValue(table, row, i);
 
-    // Process variable arguments until a sentinel value is encountered
-    while ((value = va_arg(args, enum TPTable_Column_Types)) != -1) {
-        printf("Next Argument: %d\n", value);
-    }
+		values[i] = gval;
+	}
+	return values;
+}
+void save_model(char* tablename,void* model, int count, ...) {
+	va_list args;
+	va_start(args,count);
 
-    va_end(args);
+	for(int i = 0 ; i < count; i++){
+		switch(va_arg(args,enum TPTable_Column_Types)){
+			case TP_STRING:
+				printf("STRING\n");
+				break;
+			case TP_INT:
+				printf("INT\n");
+				break;
+		}
+	}
+	va_end(args);
+}
+
+
+void *get_model(void* (*filler)(void **), TPTable *table, int row){
+	void **values = getTypeValueList(table,row);
+	void *value = filler(values);
+	for(int i = 0; i < table->ColCount;i++){
+		free(values[i]);
+	}
+	free(values);
+	return value;
 }
 
 typedef struct {
-	TPTable *mytable;
-	void *model;
-
-} ModelHolder;
-
-typedef struct {
-	char *name;
+	char *firstname;
+	char *lastname;
 	int age;
 } User;
+
+
+void *new_user(void **values)
+{
+
+	User *model = malloc(sizeof(User));
+	model->firstname =  strdup((char*) values[0]);
+	model->lastname  =  strdup((char*) values[1]);
+	model->age       = *(int*)         values[2];
+
+	return model;
+}
 
 int main()
 {
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 
-	User alfred = {"Alfred", 180};
-	save_model(&alfred, TP_STRING, TP_INT);
+	AddTable(MainDatabase, "tables");
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING,TP_STRING,TP_INT);
+	TPTable *table = MainDatabase->Tables[0];
+
+	User alfred = {"Alfred", "Roos", 19};
+	save_model(NULL,NULL,NULL);
+
+	AddRow(table,3,"ali","al rashini",19);
+
+	User *get = get_model(new_user,table,0);
+	puts(get->firstname);
+	puts(get->lastname);
+	printf("age %d\n",get->age);
+
+	free(get->firstname);
+	free(get->lastname);
+	free(get);
 
 	DestroyTPDatabase(MainDatabase);
 	return 0;
