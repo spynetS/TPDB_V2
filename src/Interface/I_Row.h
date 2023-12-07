@@ -5,6 +5,7 @@
 
 TPTable_Row *CreateTPTableRow(int __ID, TPTable *_Table);
 void DestroyTPTableRow(TPTable_Row *_self);
+void EmptyRowValues(TPTable_Row *_self);
 
 /*
  * Returns the value from the row specified at the column

@@ -339,6 +339,7 @@ enum TP_ERROR_TYPES TP_TEST_SERIALIZE_Str_Int()
 	}
 
 }
+
 enum TP_ERROR_TYPES TP_TEST_SERIALIZE_Str_Float()
 {
 	printf("--|TP_TEST_SERIALIZE_Str_Float|--: ...");
@@ -364,8 +365,8 @@ enum TP_ERROR_TYPES TP_TEST_SERIALIZE_Str_Float()
 
 }
 
-
-enum TP_ERROR_TYPES TP_TEST_GETROWVALUE(){
+enum TP_ERROR_TYPES TP_TEST_GETROWVALUE()
+{
 	printf("--|TP_TEST_TP_TEST_GETROWVALUE|--: ...\n");
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 

@@ -5,24 +5,47 @@
 
 #include "./Errors/I_Errors.h"
 #include "./Utils/StringTools.h"
+#include "./Utils/SerializeTools.h"
 #include "./Utils/MiscTools.h"
 
 #include "./Storage/Storage.h"
 
 #include "./Interface/I_Database.h"
 #include "Interface/I_Table.h"
-#include "TPDB_Global.h"
-#include "./Errors/I_Errors.h"
-#include "./Utils/StringTools.h"
-#include "./Utils/MiscTools.h"
-
-#include "./Storage/Storage.h"
-
-#include "./Interface/I_Database.h"
-#include "./Interface/I_Table.h"
 #include "./Interface/I_Row.h"
+#include "TPDB_Global.h"
 
-int main(){
+int Main_Ali_Test()
+{
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+	
+	AddTable(MainDatabase, "Users");
+	TPTable *UsersTable = MainDatabase->Tables[0];
+	UsersTable->RowsOnDemand = TP_TRUE;
+
+	SetColumnTypes(UsersTable, 3, TP_STRING, TP_STRING, TP_INT);
+	AddRow(UsersTable, 3, "Ali", "123", 22);
+
+	// Get Row lazyLoad enabled.
+	TPTable_Row *Row = GetRow(UsersTable, 0);
+
+	int *age = (int*)GetRowValue(UsersTable, Row, 2); //Update age value
+	(*age) = 32;
+
+	free(Row->Values[2]);
+	Row->Values[2] = SERIALIZE_Int_Str((*age));
+	UpdateRow(UsersTable, Row);
+	
+	free(age); age = NULL;
+	DestroyTPDatabase(MainDatabase);
+	return 0;
+}
+
+int main()
+{
+	Main_Ali_Test();
+	return 0;
+
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 
 	AddTable(MainDatabase, "Users");
@@ -31,12 +54,10 @@ int main(){
 	AddRow(MainDatabase->Tables[0], 4, "Ali", "123", 22,NULL);
 
 	TPForeignKey fkey = {"Users", 0};
-	AddRow(MainDatabase->Tables[0], 4, "Alfred", "123", 22,&fkey);
-
+	AddRow(MainDatabase->Tables[0], 4, "Alfred", "123", 22, &fkey);
 
 	char *str = MainDatabase->Tables[0]->Rows[0]->Values[0];
 	puts(str);
-
 
 	DestroyTPDatabase(MainDatabase);
 	return 0;

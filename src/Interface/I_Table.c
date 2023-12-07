@@ -199,6 +199,6 @@ TPTable_Row *GetRow(TPTable *_self, int _row)
 
 	if(RowPath != NULL){ free(RowPath); RowPath = NULL; }
 	if(RowStr != NULL){ free(RowStr); RowStr = NULL; }
-	if(RowSplit != NULL){ FreeArrayOfPointers(&RowSplit, _self->ColCount); }
+	if(RowSplit != NULL){ FreeArrayOfPointers((void***)&RowSplit, _self->ColCount); }
 	return _self->Rows[_row];
 }
