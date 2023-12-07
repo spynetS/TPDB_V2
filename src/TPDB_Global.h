@@ -1,6 +1,7 @@
 #ifndef TPDB_GLOBAL_H
 #define TPDB_GLOBAL_H
 #include <stdio.h>
+#include <math.h>
 
 #define TP_TRUE 1
 #define TP_FALSE 0
@@ -9,6 +10,8 @@
 #define TP_IGNORE 0
 
 #define TP_ROW_EXT ".tdf"
+#define TP_KEEP_ROW_VAL_NUM NAN
+#define TP_KEEP_ROW_VAL_PTR NULL
 
 enum TPTable_Column_Types
 {
