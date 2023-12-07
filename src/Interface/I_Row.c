@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../Errors/I_Errors.h"
 #include "../Utils/StringTools.h"
 #include "../Storage/Storage.h"
+#include "../Utils/SerializeTools.h"
+
 #include "I_Row.h"
 
 TPTable_Row *CreateTPTableRow(int __ID, TPTable *_Table)
@@ -80,4 +83,32 @@ enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self)
 	free(ToStore);
 	if(_parent->RowsOnDemand == TP_TRUE){ EmptyRowValues(_self); }
 	return TP_SUCCESS;
+}
+
+/**
+ * TODO
+ * Implement for all types
+ * */
+void *GetRowValue(TPTable *table,TPTable_Row *row, int column){
+
+	char *value = row->Values[column];
+
+	switch(table->ColumnTypes[column]){
+		case TP_STRING:
+			char* strVal = (char*)malloc(sizeof(char)*(strlen(value)+1));
+			strcpy(strVal,value);
+			strVal[strlen(value)] = '\0';
+			return strVal;
+
+		case TP_INT:
+			return SERIALIZE_Str_Int(value);
+
+		case TP_FLOAT:
+			return SERIALIZE_Str_Float(value);
+
+		case TP_FKEY:
+			return SERIALIZE_Str_Row(table->ParentDatabase,value);
+	}
+
+	return NULL;
 }
