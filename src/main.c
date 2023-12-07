@@ -43,21 +43,27 @@ int Main_Ali_Test()
 
 int main()
 {
-	Main_Ali_Test();
-	return 0;
-
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 
 	AddTable(MainDatabase, "Users");
+	TPTable *usersTable = MainDatabase->Tables[0];
 	SetColumnTypes(MainDatabase->Tables[0], 4, TP_STRING,TP_STRING,TP_INT, TP_FKEY);
 
 	AddRow(MainDatabase->Tables[0], 4, "Ali", "123", 22,NULL);
 
-	TPForeignKey fkey = {"Users", 0};
+	TPForeignKey fkey = {0, 0};
 	AddRow(MainDatabase->Tables[0], 4, "Alfred", "123", 22, &fkey);
 
-	char *str = MainDatabase->Tables[0]->Rows[0]->Values[0];
-	puts(str);
+
+	TPTable_Row *me = GetRow(usersTable,1);
+
+	TPTable_Row *friend = GetRowValue(usersTable,me,3);
+	if(friend != NULL)
+		puts(friend->Values[0]);
+	char* name = GetRowValue(usersTable,me,0);
+	puts(name);
+	free(name);
+
 
 	DestroyTPDatabase(MainDatabase);
 	return 0;

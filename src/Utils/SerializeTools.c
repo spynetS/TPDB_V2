@@ -33,9 +33,9 @@ char *SERIALIZE_Char_Str(char a)
 
 char *SERIALIZE_Fkey_Str(TPForeignKey *a)
 {
-	size_t aSize = snprintf(NULL, 0, "%s:%d", a->TableName, a->_ID) + 1;
+	size_t aSize = snprintf(NULL, 0, "%d:%d", a->TableId, a->_ID) + 1;
 	char *ret = (char*)malloc(sizeof(char) * aSize);
-	sprintf(ret, "%s:%d", a->TableName, a->_ID);
+	sprintf(ret, "%d:%d", a->TableId, a->_ID);
 	return ret;
 }
 
@@ -63,28 +63,17 @@ TPTable_Row *SERIALIZE_Str_Row(TPDatabase *database,char *str)
 	int amountOfSplits=0;
 	char **split = TP_SplitString(str, ':', &amountOfSplits);
 
-	/* Set the name and id values */
-	char *name = malloc(sizeof(char)*(50));
-	sprintf(name,"/%s",split[0]);/* Add a forward slas before becase tablename includes that */
-	char *id = split[1];
+
+	int *tableIdInt = SERIALIZE_Str_Int(split[0]);
+	int *col = SERIALIZE_Str_Int(split[1]);
 
 	TPTable_Row *returnRow;
-	/* Find the right table and get the row and copy its value to the one we are going to return  */
-	for(size_t i = 0; i < database->TablesCount;i ++)
-	{
-		if(strcmp(database->Tables[i]->Name,name) == 0)
-		{
-			//parse the id
-			int *col = SERIALIZE_Str_Int(id);
-			returnRow = database->Tables[i]->Rows[*col];
+	returnRow = database->Tables[*tableIdInt]->Rows[*col];
 
-			free(col);
-			break;
-		}
-	}
-	free(name);
-	free(id);
+	free(tableIdInt);
+	free(col);
 	free(split[0]);
+	free(split[1]);
 	free(split);
 
 

@@ -21,7 +21,7 @@ enum TPTable_Column_Types
 
 typedef struct
 {
-	char *TableName;
+	int TableId;
 	int _ID;
 } TPForeignKey;
 
