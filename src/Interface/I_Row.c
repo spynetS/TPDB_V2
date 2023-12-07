@@ -95,8 +95,9 @@ void *GetRowValue(TPTable *table,TPTable_Row *row, int column){
 
 	switch(table->ColumnTypes[column]){
 		case TP_STRING:
-			char* strVal = (char*)malloc(sizeof(char)*strlen(value));
+			char* strVal = (char*)malloc(sizeof(char)*(strlen(value)+1));
 			strcpy(strVal,value);
+			strVal[strlen(value)] = '\0';
 			return strVal;
 
 		case TP_INT:

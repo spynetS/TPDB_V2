@@ -376,18 +376,33 @@ enum TP_ERROR_TYPES TP_TEST_GETROWVALUE(){
 	TPTable_Row *row = MainDatabase->Tables[0]->Rows[0];
 	char *name = (char*)GetRowValue(MainDatabase->Tables[0], row, 0);
 	int *age = (int*)GetRowValue(MainDatabase->Tables[0], row, 2);
-	free(name);
-	free(age);
 
 	if(strcmp(name,"Ali") == 0 && (*age) == 22)
 	{
 		free(name);
 		free(age);
+
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		free(name);
+		free(age);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_GETROWVALUE;
+	}
+}
+
 enum TP_ERROR_TYPES TP_TEST_GetRow()
 {
 	printf("--|TP_TEST_GetRow|--: ...");
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
-	
+
 	AddTable(MainDatabase, "Users");
 	MainDatabase->Tables[0]->RowsOnDemand = TP_TRUE;
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
@@ -405,14 +420,6 @@ enum TP_ERROR_TYPES TP_TEST_GetRow()
 	}
 	else
 	{
-		free(name);
-		free(age);
-		DestroyTPDatabase(MainDatabase);
-		printf(ERROR_ASCII_FAIL);
-		printf("\n");
-		return TP_FAILED_GETROWVALUE;
-	}
-
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_FAIL);
 		printf("\n");
