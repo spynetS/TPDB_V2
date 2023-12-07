@@ -17,4 +17,6 @@ void *GetRowValue(TPTable *table,TPTable_Row *row, int column);
 
 enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self);
 
+enum TP_ERROR_TYPES SetRowValues(TPTable *_parent, TPTable_Row *_self, int _count, ...);
+
 #endif

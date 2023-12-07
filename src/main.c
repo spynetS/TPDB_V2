@@ -30,10 +30,9 @@ int Main_Ali_Test()
 	TPTable_Row *Row = GetRow(UsersTable, 0);
 
 	int *age = (int*)GetRowValue(UsersTable, Row, 2); //Update age value
-	(*age) = 32;
+	(*age) = 50;
 
-	free(Row->Values[2]);
-	Row->Values[2] = SERIALIZE_Int_Str((*age));
+	SetRowValues(UsersTable, Row, UsersTable->ColCount, "hi", TP_KEEP_ROW_VAL_PTR, (*age));
 	UpdateRow(UsersTable, Row);
 	
 	free(age); age = NULL;
