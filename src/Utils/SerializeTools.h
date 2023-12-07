@@ -6,4 +6,6 @@ char *SERIALIZE_Float_Str(float a);
 char *SERIALIZE_Char_Str(char a);
 char *SERIALIZE_Fkey_Str(TPForeignKey *a);
 
+char *SERIALIZE_RowID_Path(TPTable *_tbl, int _id);
+
 #endif

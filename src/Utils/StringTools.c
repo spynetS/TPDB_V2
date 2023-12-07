@@ -123,7 +123,7 @@ char **TP_SplitString(char *_str, char _separator, int *_returnCount)
 	}
 	ret[tokenCount] = strndup(_str + tokensIndex[tokenCount - 1] + 1, 
 		(tokenCount > 1) ? _strLEN - tokensIndex[tokenCount - 2] - 1 : _strLEN - tokensIndex[tokenCount - 1] - 1);
-	(*_returnCount) = tokenCount + 1;
+	if(_returnCount != NULL){ (*_returnCount) = tokenCount + 1; }
 
 	free(tokensIndex);
 	return ret;

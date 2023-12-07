@@ -36,3 +36,11 @@ char *SERIALIZE_Fkey_Str(TPForeignKey *a)
 	sprintf(ret, "%s:%d", a->TableName, a->_ID);
 	return ret;
 }
+
+char *SERIALIZE_RowID_Path(TPTable *_tbl, int _id)
+{
+	size_t retSize = snprintf(NULL, 0, "%s/%d.tdf", _tbl->Path, _id) + 1;
+	char *ret = (char*)malloc(sizeof(char) * retSize);
+	sprintf(ret, "%s/%d.tdf", _tbl->Path, _id);
+	return ret;
+}

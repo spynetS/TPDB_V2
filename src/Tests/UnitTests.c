@@ -315,6 +315,35 @@ enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
 	}
 }
 
+enum TP_ERROR_TYPES TP_TEST_GetRow()
+{
+	printf("--|TP_TEST_GetRow|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+	
+	AddTable(MainDatabase, "Users");
+	MainDatabase->Tables[0]->RowsOnDemand = TP_TRUE;
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
+
+	// Do not free _row. It is just a pointer to a value in Table->Rows. It will get free'd with DestroyTPDatabase, etc...
+	TPTable_Row *_row = GetRow(MainDatabase->Tables[0], 0);
+
+	if(_row != NULL && strcmp(_row->Values[0], "Ali") == 0 && strcmp(_row->Values[1], "123") == 0 && strcmp(_row->Values[2], "22") == 0)
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_AddTable;
+	}
+}
+
 int main()
 {
 	puts("--|UnitTest|--");
@@ -338,5 +367,7 @@ int main()
 	TP_CheckError(TP_TEST_AddTable(), TP_EXIT);
 	TP_CheckError(TP_TEST_AddRow(), TP_EXIT);
 	TP_CheckError(TP_TEST_InsertRowToIndexTable(), TP_EXIT);
+
+	TP_CheckError(TP_TEST_GetRow(), TP_EXIT);
 	exit(0);
 }
