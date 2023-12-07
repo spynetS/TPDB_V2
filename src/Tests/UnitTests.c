@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "../Errors/I_Errors.h"
 #include "../Utils/StringTools.h"
@@ -293,10 +294,10 @@ enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
 	AddIndexColumn(MainDatabase->Tables[0], 2);
 
-	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
-	AddRow(MainDatabase->Tables[0], 3, "Alfred", "asd", 2);
-	AddRow(MainDatabase->Tables[0], 3, "ludde", "ass", 23);
-	AddRow(MainDatabase->Tables[0], 3, "lukass", "ad", 60);
+	for (size_t i = 0; i < 1; i++)
+	{
+		AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 10 * i);
+	}
 
 	if(MainDatabase != NULL)
 	{

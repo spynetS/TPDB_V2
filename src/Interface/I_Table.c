@@ -171,3 +171,7 @@ enum TP_ERROR_TYPES AddIndexColumn(TPTable *_self, int _col)
 
 	return TP_SUCCESS;
 }
+
+enum TP_ERROR_TYPES GetRow(TPTable *_self, int _row)
+{
+}

@@ -45,8 +45,6 @@ char *TP_ReadFile(char* _path)
 		return strdup("");
 	}
 
-
-	printf("tttt: %d\n", fLen);
 	char *ret = (char*)malloc(sizeof(char) * (fLen + 1));
 	
 	if(fread(ret, sizeof(char), fLen, f) != fLen)
@@ -57,7 +55,6 @@ char *TP_ReadFile(char* _path)
 	}
 
 	ret[fLen] = '\0';
-	puts(ret);
 	fclose(f);
 	return ret;
 }
