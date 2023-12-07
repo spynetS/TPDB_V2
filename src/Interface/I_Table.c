@@ -132,7 +132,13 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 				break;
 			case TP_FKEY:
 				TPForeignKey* _TPForeignKey = va_arg(args, TPForeignKey*);
-				_self->Rows[_self->RowCount - 1]->Values[i] = SERIALIZE_Fkey_Str(_TPForeignKey);
+				if(_TPForeignKey != NULL)
+				{
+					_self->Rows[_self->RowCount - 1]->Values[i] = SERIALIZE_Fkey_Str(_TPForeignKey);
+				}else
+				{
+					_self->Rows[_self->RowCount - 1]->Values[i] = strdup("NULL");
+				}
 				break;
 			default:
 				char *_charp = va_arg(args, char*);
