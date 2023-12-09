@@ -15,8 +15,19 @@ void EmptyRowValues(TPTable_Row *_self);
  * */
 void *GetRowValue(TPTable *table,TPTable_Row *row, int column);
 
+/*
+ * Returns the values' list but the as void** where the values
+ * are the right types
+ * (all values are copies of the row value, YOU MUST FREE)
+ * @param table, the table where the row is from
+ * @param row, the row to fetch from
+ * */
+
+void** GetTypeValues(TPTable *table, TPTable_Row *row);
+
 enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self);
 
 enum TP_ERROR_TYPES SetRowValues(TPTable *_parent, TPTable_Row *_self, int _count, ...);
+
 
 #endif
