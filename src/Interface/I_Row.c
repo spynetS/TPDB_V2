@@ -76,6 +76,13 @@ void** GetTypeValues(TPTable *table, TPTable_Row *row)
 	}
 	return values;
 }
+void FreeTypeValues(void** typevalues, size_t arr_size)
+{
+	for(size_t i = 0; i < arr_size; i++){
+		free(typevalues[i]);
+	}
+	free(typevalues);
+}
 
 enum TP_ERROR_TYPES UpdateRow(TPTable *_parent, TPTable_Row *_self)
 {
