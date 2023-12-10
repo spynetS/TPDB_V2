@@ -41,9 +41,9 @@ void DestroyTPTableRow(TPTable_Row *_self)
 					_self->Values[i] = NULL;
 				}
 			}
-			free(_self->Values);
+			free(_self->Values); _self->Values = NULL;
 		}
-		free(_self);
+		free(_self); _self = NULL;
 	}
 }
 

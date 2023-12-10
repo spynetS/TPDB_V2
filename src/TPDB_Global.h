@@ -37,6 +37,14 @@ typedef struct
 	char **Values;
 } TPTable_Row;
 
+typedef struct 
+{
+	int LastId;
+	int RowCount;
+	int LazyLoad;
+} TPTable_Conf;
+
+
 typedef struct
 {
 	TPDatabase *ParentDatabase;

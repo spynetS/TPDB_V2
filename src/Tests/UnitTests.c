@@ -271,6 +271,7 @@ enum TP_ERROR_TYPES TP_TEST_AddRow()
 
 	if(MainDatabase != NULL)
 	{
+		SyncTable(MainDatabase->Tables[0]);
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_SUCCESS);
 		printf("\n");
@@ -302,6 +303,7 @@ enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
 
 	if(MainDatabase != NULL)
 	{
+		SyncTable(MainDatabase->Tables[0]);
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_SUCCESS);
 		printf("\n");
@@ -383,6 +385,7 @@ enum TP_ERROR_TYPES TP_TEST_GETROWVALUE()
 		free(name);
 		free(age);
 
+		SyncTable(MainDatabase->Tables[0]);
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_SUCCESS);
 		printf("\n");
@@ -410,10 +413,47 @@ enum TP_ERROR_TYPES TP_TEST_GetRow()
 	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
 
 	// Do not free _row. It is just a pointer to a value in Table->Rows. It will get free'd with DestroyTPDatabase, etc...
+	// If RowsOnDemand is true, then do not forget to free (DestroyTPTableRow()) the row. It has no link to the table and therefore needs to be freed.
 	TPTable_Row *_row = GetRow(MainDatabase->Tables[0], 0);
 
 	if(_row != NULL && strcmp(_row->Values[0], "Ali") == 0 && strcmp(_row->Values[1], "123") == 0 && strcmp(_row->Values[2], "22") == 0)
 	{
+		SyncTable(MainDatabase->Tables[0]);
+		DestroyTPTableRow(_row);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPTableRow(_row);
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_AddTable;
+	}
+}
+
+enum TP_ERROR_TYPES TP_TEST_GetTable()
+{
+	printf("--|TP_TEST_GetTable|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+
+	GetTable(MainDatabase, "Users");
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+
+	TPTable_Row *Row0 = GetRow(MainDatabase->Tables[0], 0);
+	int *Row0Age = (int*)GetRowValue(MainDatabase->Tables[0], Row0, 2);
+	printf("Row0Age: %d\n", (*Row0Age));
+	free(Row0Age); Row0Age = NULL;
+	DestroyTPTableRow(Row0);
+
+	AddRow(MainDatabase->Tables[0], 3, "Hello", "World", 100);
+
+	if(MainDatabase->Tables[0]->RowCount == 2)
+	{
+		SyncTable(MainDatabase->Tables[0]);
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_SUCCESS);
 		printf("\n");
@@ -424,7 +464,7 @@ enum TP_ERROR_TYPES TP_TEST_GetRow()
 		DestroyTPDatabase(MainDatabase);
 		printf(ERROR_ASCII_FAIL);
 		printf("\n");
-		return TP_FAILED_AddTable;
+		return TP_FAILED_GetTable;
 	}
 }
 
@@ -458,6 +498,7 @@ int main()
 	TP_CheckError(TP_TEST_GETROWVALUE(), TP_EXIT);
 
 	TP_CheckError(TP_TEST_GetRow(), TP_EXIT);
+	TP_CheckError(TP_TEST_GetTable(), TP_EXIT);
 
 	exit(0);
 }

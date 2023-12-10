@@ -96,19 +96,9 @@ enum TP_ERROR_TYPES SetColumnTypes(TPTable *_self, int _count, ...)
 enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 {
 	if(_self->ColumnTypes == NULL || _self->ColCount <= 0){ return TP_FAILED_AddRow; }
-	_self->Rows = realloc(_self->Rows, sizeof(TPTable_Row) * (_self->RowCount + 1));
 	_count = _self->ColCount;
 
-	if(_self->Rows != NULL)
-	{
-		_self->Rows[_self->RowCount] = CreateTPTableRow(_self->LastRowID, _self);
-		_self->RowCount++;
-		_self->LastRowID++;
-	}
-	else
-	{
-		return TP_FAILED_AddRow;
-	}
+	TPTable_Row *NewRow = CreateTPTableRow(_self->LastRowID, _self);
 
 	va_list args;
 	va_start(args, _count);
@@ -119,35 +109,57 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 		{
 			case TP_INT:
 				int _int = va_arg(args, int);
-				_self->Rows[_self->RowCount - 1]->Values[i] = SERIALIZE_Int_Str(_int);
+				NewRow->Values[i] = SERIALIZE_Int_Str(_int);
 				break;
 			case TP_FLOAT:
 				double _float = va_arg(args, double);
-				_self->Rows[_self->RowCount - 1]->Values[i] = SERIALIZE_Float_Str(_float);
+				NewRow->Values[i] = SERIALIZE_Float_Str(_float);
 				break;
 			case TP_CHAR:
 				unsigned char _char = (unsigned char)va_arg(args, int);
-				_self->Rows[_self->RowCount - 1]->Values[i] = SERIALIZE_Char_Str(_char);
+				NewRow->Values[i] = SERIALIZE_Char_Str(_char);
 				break;
 			case TP_FKEY:
 				TPForeignKey* _TPForeignKey = va_arg(args, TPForeignKey*);
 				if(_TPForeignKey != NULL)
 				{
-					_self->Rows[_self->RowCount - 1]->Values[i] = SERIALIZE_Fkey_Str(_TPForeignKey);
+					NewRow->Values[i] = SERIALIZE_Fkey_Str(_TPForeignKey);
 				}else
 				{
-					_self->Rows[_self->RowCount - 1]->Values[i] = strdup("NULL");
+					NewRow->Values[i] = strdup("NULL");
 				}
 				break;
 			default:
 				char *_charp = va_arg(args, char*);
-				_self->Rows[_self->RowCount - 1]->Values[i] = strdup(_charp);
+				NewRow->Values[i] = strdup(_charp);
 				break;
 		}
 	}
 	va_end(args);
 
-	UpdateRow(_self, _self->Rows[_self->RowCount - 1]);
+	if(NewRow != NULL)
+	{
+		if(_self->RowsOnDemand == TP_FALSE)
+		{
+			_self->Rows = realloc(_self->Rows, sizeof(TPTable_Row) * (_self->RowCount + 1));
+			_self->Rows[_self->RowCount] = NewRow;
+		}
+		_self->RowCount++;
+		_self->LastRowID++;
+	}
+	else
+	{
+		return TP_FAILED_AddRow;
+	}
+
+	if(_self->RowsOnDemand == TP_FALSE)
+	{
+		UpdateRow(_self, _self->Rows[_self->RowCount - 1]);
+	}
+	else
+	{
+		UpdateRow(_self, NewRow);
+	}
 
 	// ########### Index ########### //
 	
@@ -158,12 +170,17 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...)
 			int colIndex = _self->ColumnsToIndex[i];
 			if(_self->ColumnTypes[colIndex] == TP_INT || _self->ColumnTypes[colIndex] == TP_FLOAT)
 			{
-				char *targetRangeStr = TP_GetIntRangeStr(_self->ColumnsIndexOffset, atoi(_self->Rows[_self->RowCount - 1]->Values[colIndex]));
-				TP_CheckError(TP_InsertRowToIndexTable(_self, _self->Rows[_self->RowCount - 1], targetRangeStr, colIndex), TP_EXIT);
+				char *targetRangeStr = TP_GetIntRangeStr(_self->ColumnsIndexOffset, atoi(NewRow->Values[colIndex]));
+				TP_CheckError(TP_InsertRowToIndexTable(_self, NewRow, targetRangeStr, colIndex), TP_EXIT);
 				free(targetRangeStr);
 			}
 			// No string indexing implementation. Later update.
 		}
+	}
+
+	if(_self->RowsOnDemand == TP_TRUE)
+	{
+		DestroyTPTableRow(NewRow);
 	}
 
 	return TP_SUCCESS;
@@ -191,14 +208,32 @@ TPTable_Row *GetRow(TPTable *_self, int _row)
 	char *RowStr  = TP_ReadFile(RowPath);
 	char **RowSplit = TP_SplitString(RowStr, ';', NULL);
 
+	TPTable_Row *NewRow = CreateTPTableRow(_row, _self);
+
 	for (int i = 0; i < _self->ColCount; i++)
 	{
-		_self->Rows[_row]->Values[i] = strdup(RowSplit[i]);
+		NewRow->Values[i] = strdup(RowSplit[i]);
 	}
-	_self->Rows[_row]->ValCount = _self->ColCount;
+	NewRow->ValCount = _self->ColCount;
 
 	if(RowPath != NULL){ free(RowPath); RowPath = NULL; }
 	if(RowStr != NULL){ free(RowStr); RowStr = NULL; }
 	if(RowSplit != NULL){ FreeArrayOfPointers((void***)&RowSplit, _self->ColCount); }
-	return _self->Rows[_row];
+	return NewRow;
+}
+
+enum TP_ERROR_TYPES SyncTable(TPTable *_self)
+{
+	size_t ConfPathSize = snprintf(NULL, 0, "%s%s/Conf.txt", _self->ParentDatabase->ConfigPath, _self->Name) + 1;
+	char *ConfPath = (char*)malloc(sizeof(char) * ConfPathSize);
+	sprintf(ConfPath, "%s%s/Conf.txt", _self->ParentDatabase->ConfigPath, _self->Name);
+
+	size_t ConfValSize = snprintf(NULL, 0, "LastId:%d\nRowCount:%d\nLazyLoad:%d", _self->LastRowID, _self->RowCount, _self->RowsOnDemand) + 1;
+	char *ConfVal = (char*)malloc(sizeof(char) * ConfValSize);
+	sprintf(ConfVal, "LastId:%d\nRowCount:%d\nLazyLoad:%d", _self->LastRowID, _self->RowCount, _self->RowsOnDemand);
+
+	TP_StoreFile(ConfPath, ConfVal);
+
+	free(ConfPath);
+	free(ConfVal);
 }

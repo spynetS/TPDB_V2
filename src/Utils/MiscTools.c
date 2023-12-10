@@ -4,6 +4,8 @@
 #include <math.h>
 
 #include "MiscTools.h"
+#include "StringTools.h"
+#include "../Storage/Storage.h"
 
 enum TP_ERROR_TYPES AppendToArrayOfPointers(void ***targetArray, size_t *targetArrayLength, void *ToAppend, size_t elementSize)
 {
@@ -62,35 +64,6 @@ enum TP_ERROR_TYPES FreeArrayOfPointers(void ***targetArray, size_t targetArrayL
 	}
 }
 
-/* enum TP_ERROR_TYPES AppendToArrayOfPointers(void ***targetArray, size_t *targetArrayLength, void *ToAppend, size_t elementSize)
-{
-    void **newArray = NULL;
-
-    if ((*targetArray) == NULL)
-    {
-        newArray = malloc(elementSize);
-    }
-    else
-    {
-        newArray = realloc((*targetArray), elementSize * ((*targetArrayLength) + 1));
-    }
-
-    if (newArray == NULL)
-    {
-        return TP_FAILED_AppendToArrayOfPointers; // Allocation failure
-    }
-
-    // Copy the new element
-    memcpy(newArray[*targetArrayLength], ToAppend, elementSize);
-
-    // Update the array and length
-    *targetArray = newArray;
-    (*targetArrayLength)++;
-
-    return TP_SUCCESS;
-}
- */
-
 char* TP_GetIntRangeStr(int _offset, int _val)
 {
 	int i = floor(_val/_offset) * _offset;
@@ -101,4 +74,43 @@ char* TP_GetIntRangeStr(int _offset, int _val)
 	sprintf(ret, "%d-%d", i, j);
 
 	return ret;
+}
+
+TPTable_Conf *ReadTableConfig(TPTable *_self)
+{
+	TPTable_Conf *ToRet = (TPTable_Conf*)malloc(sizeof(TPTable_Conf));
+	
+	char *ConfPath = TP_StrnCat(_self->ParentDatabase->ConfigPath, 2, _self->Name, "/Conf.txt");
+	char *ConfText = TP_ReadFile(ConfPath);
+
+	int ConfLinesCount = 0;
+	char **ConfLines = TP_SplitString(ConfText, '\n', &ConfLinesCount);
+
+	for (int i = 0; i < ConfLinesCount; i++)
+	{
+		char **ConfLineSplit = TP_SplitString(ConfLines[i], ':', NULL);
+
+		switch (i)
+		{
+			case 0:
+				ToRet->LastId = atoi(ConfLineSplit[1]);
+				break;
+			case 1:
+				ToRet->RowCount = atoi(ConfLineSplit[1]);
+				break;
+			case 2:
+				ToRet->LazyLoad = atoi(ConfLineSplit[1]);
+				break;
+		}
+
+		free(ConfLineSplit[1]); ConfLineSplit[1] = NULL;
+		free(ConfLineSplit[0]); ConfLineSplit[0] = NULL;
+		free(ConfLineSplit); ConfLineSplit = NULL;
+	}
+
+	FreeArrayOfPointers((void***)&ConfLines, ConfLinesCount);
+	free(ConfPath); ConfPath = NULL;
+	free(ConfText); ConfText = NULL;
+
+	return ToRet;
 }

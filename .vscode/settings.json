@@ -3,6 +3,7 @@
 		"tpdb_global.h": "c",
 		"i_errors.h": "c",
 		"stdio.h": "c",
-		"i_database.h": "c"
+		"i_database.h": "c",
+		"storage.h": "c"
 	}
 }
