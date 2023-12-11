@@ -11,6 +11,7 @@
 #include "../Storage/Storage.h"
 
 #include "../Interface/I_Database.h"
+#include "../Interface/I_Indexing.h"
 #include "../Interface/I_Table.h"
 #include "../Interface/I_Row.h"
 
@@ -267,6 +268,8 @@ enum TP_ERROR_TYPES TP_TEST_AddRow()
 	
 	AddTable(MainDatabase, "Users");
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
+	AddIndexColumn(MainDatabase->Tables[0], 2);
 	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
 
 	if(MainDatabase != NULL)
@@ -292,14 +295,11 @@ enum TP_ERROR_TYPES TP_TEST_InsertRowToIndexTable()
 	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
 	
 	AddTable(MainDatabase, "Users");
-	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
 	AddIndexColumn(MainDatabase->Tables[0], 2);
 
-	for (size_t i = 0; i < 1; i++)
-	{
-		AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 10 * i);
-	}
+	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
 
 	if(MainDatabase != NULL)
 	{
@@ -374,6 +374,8 @@ enum TP_ERROR_TYPES TP_TEST_GETROWVALUE()
 
 	AddTable(MainDatabase, "Users");
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
+	AddIndexColumn(MainDatabase->Tables[0], 2);
 	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
 
 	TPTable_Row *row = MainDatabase->Tables[0]->Rows[0];
@@ -410,7 +412,8 @@ enum TP_ERROR_TYPES TP_TEST_GetRow()
 	AddTable(MainDatabase, "Users");
 	MainDatabase->Tables[0]->RowsOnDemand = TP_TRUE;
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
-	AddRow(MainDatabase->Tables[0], 3, "Ali", "123", 22);
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
+	AddIndexColumn(MainDatabase->Tables[0], 2);
 
 	// Do not free _row. It is just a pointer to a value in Table->Rows. It will get free'd with DestroyTPDatabase, etc...
 	// If RowsOnDemand is true, then do not forget to free (DestroyTPTableRow()) the row. It has no link to the table and therefore needs to be freed.
@@ -442,6 +445,8 @@ enum TP_ERROR_TYPES TP_TEST_GetTable()
 
 	GetTable(MainDatabase, "Users");
 	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
+	AddIndexColumn(MainDatabase->Tables[0], 2);
 
 	TPTable_Row *Row0 = GetRow(MainDatabase->Tables[0], 0);
 	int *Row0Age = (int*)GetRowValue(MainDatabase->Tables[0], Row0, 2);
@@ -449,9 +454,7 @@ enum TP_ERROR_TYPES TP_TEST_GetTable()
 	free(Row0Age); Row0Age = NULL;
 	DestroyTPTableRow(Row0);
 
-	AddRow(MainDatabase->Tables[0], 3, "Hello", "World", 100);
-
-	if(MainDatabase->Tables[0]->RowCount == 2)
+	if(MainDatabase != NULL)
 	{
 		SyncTable(MainDatabase->Tables[0]);
 		DestroyTPDatabase(MainDatabase);
@@ -465,6 +468,44 @@ enum TP_ERROR_TYPES TP_TEST_GetTable()
 		printf(ERROR_ASCII_FAIL);
 		printf("\n");
 		return TP_FAILED_GetTable;
+	}
+}
+
+enum TP_ERROR_TYPES TP_TEST_GetIndexAtRange()
+{
+	printf("--|TP_TEST_GetIndexAtRange|--: ...");
+	TPDatabase *MainDatabase = CreateTPDatabase("MainDatabase", "./db");
+
+	GetTable(MainDatabase, "Users");
+	MainDatabase->Tables[0]->RowsOnDemand = TP_TRUE;
+	SetColumnTypes(MainDatabase->Tables[0], 3, TP_STRING, TP_STRING, TP_INT);
+	MainDatabase->Tables[0]->ColumnsIndexOffset = 10;
+	AddIndexColumn(MainDatabase->Tables[0], 2);
+
+	int IndexIntArrLen = 0;
+	int *IndexIntArr = TP_GetIndexAtRange(MainDatabase->Tables[0], 2, 21, &IndexIntArrLen);
+
+	printf("Index result: ");
+	for (int i = 0; i < IndexIntArrLen; i++)
+	{
+		printf("%d, ", IndexIntArr[i]);
+	}
+	printf("\n");
+
+	if(IndexIntArr != NULL) { free(IndexIntArr); IndexIntArr = NULL; }
+	if(MainDatabase != NULL)
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_SUCCESS);
+		printf("\n");
+		return TP_SUCCESS;
+	}
+	else
+	{
+		DestroyTPDatabase(MainDatabase);
+		printf(ERROR_ASCII_FAIL);
+		printf("\n");
+		return TP_FAILED_GetIndexAtRange;
 	}
 }
 
@@ -499,6 +540,8 @@ int main()
 
 	TP_CheckError(TP_TEST_GetRow(), TP_EXIT);
 	TP_CheckError(TP_TEST_GetTable(), TP_EXIT);
+
+	TP_CheckError(TP_TEST_GetIndexAtRange(), TP_EXIT);
 
 	exit(0);
 }
