@@ -12,5 +12,6 @@ enum TP_ERROR_TYPES AddRow(TPTable *_self, int _count, ...);
 enum TP_ERROR_TYPES AddIndexColumn(TPTable *_self, int _col);
 
 TPTable_Row *GetRow(TPTable *_self, int _row);
+enum TP_ERROR_TYPES SyncTable(TPTable *_self);
 
 #endif

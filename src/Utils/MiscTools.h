@@ -8,4 +8,6 @@ enum TP_ERROR_TYPES FreeArrayOfPointers(void ***targetArray, size_t targetArrayL
 
 char* TP_GetIntRangeStr(int _offset, int _val);
 
+TPTable_Conf *ReadTableConfig(TPTable *_self);
+
 #endif

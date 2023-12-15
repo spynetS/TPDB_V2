@@ -36,9 +36,10 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 			IndexTableLinesCount = 1;
 		}
 
+		char *RangeStr_Tail = TP_StrnCat(_RangeStr, 1, ":");
 		for (int i = 0; i < IndexTableLinesCount; i++)
 		{
-			if(strstr(IndexTableLines[i], _RangeStr) != NULL)
+			if(strstr(IndexTableLines[i], RangeStr_Tail) != NULL)
 			{
 				TargetLineInIndex = i;
 				int TempKeyValCount = 0;
@@ -51,6 +52,7 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 				break;
 			}
 		}
+		free(RangeStr_Tail); RangeStr_Tail = NULL;
 	}
 
 	size_t RowIdSize = snprintf(NULL, 0, "%d", _Row->_ID) + 1;
@@ -119,4 +121,60 @@ enum TP_ERROR_TYPES TP_InsertRowToIndexTable(TPTable *_Table, TPTable_Row *_Row,
 	if(IndexTableStr != NULL){ free(IndexTableStr); IndexTableStr = NULL; }
 	
 	return TP_SUCCESS;
+}
+
+int *TP_GetIndexAtRange(TPTable *_Table, int _col, int _val, int *ResultCount)
+{
+	size_t IndexTablePathSize = snprintf(NULL, 0, "%s%s/%d.cif", _Table->ParentDatabase->ConfigPath, _Table->Name, _col) + 1;
+	char * IndexTablePath = (char*)malloc(sizeof(char) * IndexTablePathSize);
+	sprintf(IndexTablePath, "%s%s/%d.cif", _Table->ParentDatabase->ConfigPath, _Table->Name, _col);
+
+	char *IndexTableStr = TP_ReadFile(IndexTablePath);
+	free(IndexTablePath); IndexTablePath = NULL;
+
+	if(strlen(IndexTableStr) <= 0) { free(IndexTableStr); IndexTableStr=NULL; return NULL; }
+
+	int IndexTableLinesCount = 0;
+	char **IndexTableLines = TP_SplitString(IndexTableStr, '\n', &IndexTableLinesCount);
+	free(IndexTableStr); IndexTableStr=NULL;
+
+	char *ValRangeStr = TP_GetIntRangeStr(_Table->ColumnsIndexOffset, _val);
+	char *ValRangeStr_Tail = TP_StrnCat(ValRangeStr, 1, ":");
+	int TargetLine = -1;
+
+	for (int i = 0; i < IndexTableLinesCount; i++)
+	{
+		if(strstr(IndexTableLines[i], ValRangeStr_Tail) != NULL)
+		{
+			TargetLine = i;
+			break;
+		}
+	}
+	if(ValRangeStr != NULL) { free(ValRangeStr); ValRangeStr = NULL; }
+	if(ValRangeStr_Tail != NULL) { free(ValRangeStr_Tail); ValRangeStr_Tail = NULL; }
+	if(TargetLine == -1)
+	{
+		FreeArrayOfPointers((void***)&IndexTableLines, IndexTableLinesCount);
+		return NULL;
+	}
+
+	char **IndexLineKeyVal = TP_SplitString(IndexTableLines[TargetLine], ':', NULL);
+	char *IndexVal = strdup(IndexLineKeyVal[1]);
+
+	FreeArrayOfPointers((void***)&IndexLineKeyVal, 2);
+	FreeArrayOfPointers((void***)&IndexTableLines, IndexTableLinesCount);
+
+	int ValCount = 0;
+	char **Vals = TP_SplitString(IndexVal, ',', &ValCount);
+	int *toRet = (int*)malloc(sizeof(int) * ValCount);
+
+	for (int i = 0; i < ValCount; i++)
+	{
+		toRet[i] = atoi(Vals[i]);
+	}
+	if(ResultCount != NULL){ (*ResultCount) = ValCount; }
+
+	free(IndexVal); IndexVal = NULL;
+	FreeArrayOfPointers((void***)&Vals, ValCount);
+	return toRet;
 }
